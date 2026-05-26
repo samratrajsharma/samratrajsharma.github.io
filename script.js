@@ -7,6 +7,8 @@
 
   const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const isTouch = window.matchMedia('(hover: none)').matches;
+  const mobileMQ = window.matchMedia('(max-width: 900px)');
+  let isMobile = mobileMQ.matches;
 
   /* ==========================================================
      1. LOADER
@@ -255,26 +257,40 @@
   let activeStage = -1;
   const stagesRevealed = new Set();
 
+  function clearStageInlineStyles() {
+    stages.forEach(stage => {
+      stage.style.opacity = '';
+      stage.style.visibility = '';
+      stage.style.transform = '';
+      stage.style.pointerEvents = '';
+    });
+  }
+
+  function setActiveStage(idx) {
+    if (idx === activeStage) return;
+    activeStage = idx;
+    hudDots.forEach((d, i) => d.classList.toggle('is-active', i === idx));
+    if (hudStageNum) hudStageNum.textContent = String(idx).padStart(2, '0');
+    stages.forEach((s, i) => s.classList.toggle('is-active', i === idx));
+  }
+
   function updateStages() {
+    if (isMobile) return; // mobile uses IntersectionObserver instead
     const scrollY = window.scrollY;
     const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
     scrollProgress = Math.min(1, Math.max(0, scrollY / totalScroll));
 
-    // Map progress to a stage float 0..(STAGE_COUNT-1)
     const stageFloat = scrollProgress * (STAGE_COUNT - 1);
     const newActive = Math.round(stageFloat);
 
-    // Compute presence for each stage
     stages.forEach((stage, i) => {
       const dist = Math.abs(stageFloat - i);
-      const presence = Math.max(0, 1 - dist * 2); // fade over half-stage
+      const presence = Math.max(0, 1 - dist * 2);
 
       if (presence > 0.01) {
         stage.style.opacity = presence;
         stage.style.visibility = 'visible';
         stage.style.pointerEvents = presence > 0.5 ? 'auto' : 'none';
-
-        // Subtle translate/scale during transition
         const translateY = (stageFloat - i) * 40;
         const scale = 0.96 + presence * 0.04;
         stage.style.transform = `translateY(${translateY}px) scale(${scale})`;
@@ -290,11 +306,51 @@
       }
     });
 
-    if (newActive !== activeStage) {
-      activeStage = newActive;
-      hudDots.forEach((d, i) => d.classList.toggle('is-active', i === newActive));
-      if (hudStageNum) hudStageNum.textContent = String(newActive).padStart(2, '0');
-      stages.forEach((s, i) => s.classList.toggle('is-active', i === newActive));
+    setActiveStage(newActive);
+  }
+
+  /* Mobile reveal — IntersectionObserver (reveal-on-entry) + center tracking */
+  let mobileObserver = null;
+  let mobileScrollHandler = null;
+
+  function updateActiveByCenter() {
+    if (!isMobile) return;
+    const center = window.scrollY + window.innerHeight / 2;
+    let bestIdx = 0;
+    let bestDist = Infinity;
+    stages.forEach((s, i) => {
+      const r = s.getBoundingClientRect();
+      const sCenter = window.scrollY + r.top + r.height / 2;
+      const dist = Math.abs(sCenter - center);
+      if (dist < bestDist) { bestDist = dist; bestIdx = i; }
+    });
+    setActiveStage(bestIdx);
+  }
+
+  function setupMobileObserver() {
+    if (mobileObserver) return;
+    mobileObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const idx = parseInt(entry.target.dataset.stage, 10);
+        if (!stagesRevealed.has(idx)) {
+          stagesRevealed.add(idx);
+          revealStage(idx);
+        }
+      });
+    }, { threshold: 0.01 });
+    stages.forEach(s => mobileObserver.observe(s));
+
+    mobileScrollHandler = () => updateActiveByCenter();
+    window.addEventListener('scroll', mobileScrollHandler, { passive: true });
+    updateActiveByCenter();
+  }
+
+  function teardownMobileObserver() {
+    if (mobileObserver) { mobileObserver.disconnect(); mobileObserver = null; }
+    if (mobileScrollHandler) {
+      window.removeEventListener('scroll', mobileScrollHandler);
+      mobileScrollHandler = null;
     }
   }
 
@@ -772,14 +828,38 @@
     attachPubsPopup();
     startOrchestraty();
 
-    window.addEventListener('resize', resize);
+    window.addEventListener('resize', () => {
+      resize();
+      const nowMobile = mobileMQ.matches;
+      if (nowMobile !== isMobile) {
+        isMobile = nowMobile;
+        if (isMobile) {
+          clearStageInlineStyles();
+          setupMobileObserver();
+        } else {
+          teardownMobileObserver();
+          updateStages();
+        }
+      }
+    });
     window.addEventListener('scroll', updateStages, { passive: true });
 
-    updateStages();
-    splitHero();
+    if (isMobile) {
+      // Mobile: stages stack naturally; reveal via IntersectionObserver
+      stages.forEach(s => s.classList.add('is-active'));
+      setupMobileObserver();
+      // Pre-reveal hero immediately
+      stagesRevealed.add(0);
+      // Kick off stage-specific reveals for the visible hero
+      requestAnimationFrame(() => {
+        if (stages[0]) setActiveStage(0);
+      });
+    } else {
+      updateStages();
+      stagesRevealed.add(0);
+    }
 
-    // Mark hero as immediately revealed
-    stagesRevealed.add(0);
+    splitHero();
   }
 
   // Boot sequence: loader → init
