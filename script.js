@@ -125,15 +125,15 @@
       p.x += p.vx;
       p.y += p.vy;
 
-      // mouse repulsion (light)
+      // Mouse repulsion — particles flee dramatically near cursor
       const mdx = p.x - mouse.x;
       const mdy = p.y - mouse.y;
       const md2 = mdx * mdx + mdy * mdy;
-      if (md2 < 18000) {
-        const f = (1 - md2 / 18000) * 0.6;
+      if (md2 < 26000) {
+        const f = (1 - md2 / 26000) * 0.9;
         const md = Math.sqrt(md2) || 1;
-        p.vx += (mdx / md) * f * 0.04;
-        p.vy += (mdy / md) * f * 0.04;
+        p.vx += (mdx / md) * f * 0.07;
+        p.vy += (mdy / md) * f * 0.07;
       }
 
       // velocity damping
@@ -288,12 +288,20 @@
       const presence = Math.max(0, 1 - dist * 2);
 
       if (presence > 0.01) {
-        stage.style.opacity = presence;
+        // Smoother eased presence for visual transitions
+        const eased = presence * presence * (3 - 2 * presence); // smoothstep
+        stage.style.opacity = eased;
         stage.style.visibility = 'visible';
         stage.style.pointerEvents = presence > 0.5 ? 'auto' : 'none';
-        const translateY = (stageFloat - i) * 40;
-        const scale = 0.96 + presence * 0.04;
-        stage.style.transform = `translateY(${translateY}px) scale(${scale})`;
+
+        // Cinematic depth — bigger translate + slight scale + blur
+        const direction = stageFloat - i;
+        const translateY = direction * 90;
+        const scale = 0.9 + eased * 0.1;
+        const blur = (1 - eased) * 6;
+        const rotateX = direction * 4;
+        stage.style.transform = `translateY(${translateY}px) scale(${scale}) perspective(1200px) rotateX(${rotateX}deg)`;
+        stage.style.filter = `blur(${blur.toFixed(2)}px)`;
 
         if (presence > 0.5 && !stagesRevealed.has(i)) {
           stagesRevealed.add(i);
@@ -303,6 +311,7 @@
         stage.style.opacity = 0;
         stage.style.visibility = 'hidden';
         stage.style.pointerEvents = 'none';
+        stage.style.filter = '';
       }
     });
 
@@ -333,12 +342,15 @@
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
         const idx = parseInt(entry.target.dataset.stage, 10);
+        // Mark in-view so CSS reveal animations fire
+        entry.target.classList.add('in-view');
+        // Run JS-driven reveal sequences once per stage
         if (!stagesRevealed.has(idx)) {
           stagesRevealed.add(idx);
           revealStage(idx);
         }
       });
-    }, { threshold: 0.01 });
+    }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
     stages.forEach(s => mobileObserver.observe(s));
 
     mobileScrollHandler = () => updateActiveByCenter();
@@ -558,6 +570,7 @@
       node.style.left = (s.x * 100) + '%';
       node.style.top = (s.y * 100) + '%';
       node.style.transitionDelay = (i * 18) + 'ms';
+      node.style.setProperty('--i', i);
       node.textContent = s.name;
       root.appendChild(node);
     });
