@@ -1,0 +1,6 @@
+# Claude Code local config — not part of the site
+.claude/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
