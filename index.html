@@ -3,605 +3,433 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="Samrat Raj Sharma — Research Scientist building physics-informed world models, multimodal diffusion, and vision-language-action systems." />
-<meta name="theme-color" content="#02010a" />
+<meta name="description" content="Samrat Raj Sharma — Research Scientist working on physics-informed world models, multimodal diffusion, and vision-language-action systems." />
+<meta name="color-scheme" content="light dark" />
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#0b0b0b" media="(prefers-color-scheme: dark)" />
 <title>Samrat Raj Sharma — Research Scientist · AI / Multimodal Systems</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Syncopate:wght@400;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3CradialGradient id='g'%3E%3Cstop offset='0' stop-color='%2300f0ff'/%3E%3Cstop offset='1' stop-color='%237b2cbf'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='40' fill='url(%23g)'/%3E%3Ctext x='50' y='62' font-family='monospace' font-size='36' font-weight='bold' text-anchor='middle' fill='black'%3ES%3C/text%3E%3C/svg%3E" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='18' fill='%23111111'/%3E%3Ctext x='50' y='70' font-family='Helvetica,Arial,sans-serif' font-size='62' font-weight='700' text-anchor='middle' fill='%23ffffff'%3ES%3C/text%3E%3C/svg%3E" />
 
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<!-- Animated background canvas -->
-<canvas id="bg-canvas" aria-hidden="true"></canvas>
-<div class="grid-overlay" aria-hidden="true"></div>
-<div class="vignette" aria-hidden="true"></div>
-<div class="noise" aria-hidden="true"></div>
+<a class="skip-link" href="#main">Skip to content</a>
 
-<!-- Custom cursor -->
-<div class="cursor" id="cursor" aria-hidden="true"></div>
-<div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
-
-<!-- Loader -->
-<div class="loader" id="loader">
-  <div class="loader-grid"></div>
-  <div class="loader-text">
-    <span class="loader-label">INITIALIZING</span>
-    <span class="loader-percent" id="loader-percent">000</span>
-  </div>
-  <div class="loader-bar"><div class="loader-bar-fill" id="loader-bar"></div></div>
-</div>
-
-<!-- Top HUD -->
-<header class="hud-top">
-  <div class="hud-logo">
-    <span class="logo-mark">◆</span>
-    <span class="logo-text">SAMRAT.RAJ</span>
-  </div>
-  <nav class="hud-nav" id="hud-nav">
-    <button class="hud-dot" data-stage="0"><span>00</span><em>INTRO</em></button>
-    <button class="hud-dot" data-stage="1"><span>01</span><em>PROFILE</em></button>
-    <button class="hud-dot" data-stage="2"><span>02</span><em>STACK</em></button>
-    <button class="hud-dot" data-stage="3"><span>03</span><em>NOW</em></button>
-    <button class="hud-dot" data-stage="4"><span>04</span><em>WORK</em></button>
-    <button class="hud-dot" data-stage="5"><span>05</span><em>CONTACT</em></button>
-  </nav>
-  <div class="hud-status">
-    <span class="status-dot"></span>
-    <span class="status-text">RESEARCH SCIENTIST / THOUGHTRONS</span>
-  </div>
-</header>
-
-<!-- Side HUD -->
-<aside class="hud-side-left" aria-hidden="true">
-  <div class="hud-meta">LAT 28.4744° N</div>
-  <div class="hud-meta">LNG 77.5040° E</div>
-  <div class="hud-meta" id="hud-time">--:--:--</div>
-</aside>
-
-<aside class="hud-side-right" aria-hidden="true">
-  <div class="hud-scroll-hint">
-    <span>SCROLL</span>
-    <span class="hud-scroll-arrow">▼</span>
-  </div>
-  <div class="hud-progress">
-    <span class="hud-progress-current" id="hud-stage-num">00</span>
-    <span class="hud-progress-divider">/</span>
-    <span class="hud-progress-total">05</span>
-  </div>
-</aside>
-
-<!-- Scroll spacer drives the experience -->
-<div class="scroll-driver" id="scroll-driver"></div>
-
-<!-- Fixed stage viewport -->
-<main class="stages" id="stages">
-
-  <!-- ============ STAGE 0 — HERO ============ -->
-  <section class="stage stage-hero" data-stage="0">
-    <div class="hero-marker hero-marker-tl">[ RESEARCH SCIENTIST · MULTIMODAL AI ]</div>
-    <div class="hero-marker hero-marker-tr">v.2026.05</div>
-    <div class="hero-marker hero-marker-bl">N° 001</div>
-    <div class="hero-marker hero-marker-br">PORTFOLIO_INDEX</div>
-
-    <div class="hero-center">
-      <div class="hero-eyebrow">
-        <span class="hero-eyebrow-line"></span>
-        <span>PORTFOLIO / 2026</span>
-        <span class="hero-eyebrow-line"></span>
-      </div>
-      <h1 class="hero-title" aria-label="Samrat Raj Sharma">
-        <span class="hero-word" data-text="SAMRAT">SAMRAT</span>
-        <span class="hero-word hero-word-outline" data-text="RAJ">RAJ</span>
-        <span class="hero-word" data-text="SHARMA">SHARMA</span>
-      </h1>
-      <div class="hero-subtitle">
-        <span class="subtitle-chip">VISION</span>
-        <span class="subtitle-dot">·</span>
-        <span class="subtitle-chip">LANGUAGE</span>
-        <span class="subtitle-dot">·</span>
-        <span class="subtitle-chip">ACTION</span>
-      </div>
-      <div class="hero-tagline">
-        <span class="tagline-line">Building neural systems that <em>perceive</em>, <em>reason</em>, and <em>act</em> in the physical world.</span>
-      </div>
+<!-- ============ NAV ============ -->
+<nav class="nav" aria-label="Primary">
+  <div class="nav-inner">
+    <a class="nav-name" href="#top">Samrat Raj Sharma</a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#work">Work</a>
+      <a href="#publications">Publications</a>
+      <a href="#contact">Contact</a>
     </div>
+  </div>
+</nav>
 
-    <div class="hero-glyph" aria-hidden="true">
-      <svg viewBox="0 0 200 200" class="orbit-svg">
-        <circle cx="100" cy="100" r="80" class="orbit-ring orbit-ring-1"/>
-        <circle cx="100" cy="100" r="60" class="orbit-ring orbit-ring-2"/>
-        <circle cx="100" cy="100" r="40" class="orbit-ring orbit-ring-3"/>
-        <circle cx="100" cy="20"  r="3" class="orbit-dot"/>
-        <circle cx="100" cy="40"  r="2" class="orbit-dot"/>
-        <circle cx="100" cy="60"  r="2.5" class="orbit-dot"/>
-      </svg>
+<main id="main">
+
+  <!-- ============ HERO ============ -->
+  <header class="hero" id="top">
+    <div class="container">
+      <p class="eyebrow">Research Scientist — AI / Multimodal Systems</p>
+      <h1 class="hero-name">Samrat Raj Sharma</h1>
+      <p class="hero-tagline">
+        Building neural systems that <em>perceive</em>, <em>reason</em>, and
+        <em>act</em> in the physical world.
+      </p>
+      <ul class="hero-meta">
+        <li>Research Scientist · Thoughtrons</li>
+        <li>Based in India</li>
+        <li>Open to deep-tech &amp; defense collaborations</li>
+      </ul>
+      <ul class="hero-links">
+        <li><a href="mailto:samratsharma979@gmail.com">Email</a></li>
+        <li><a href="https://github.com/samratrajsharma" target="_blank" rel="noopener">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/samrat--sharma" target="_blank" rel="noopener">LinkedIn</a></li>
+      </ul>
     </div>
-  </section>
+  </header>
 
-  <!-- ============ STAGE 1 — PROFILE ============ -->
-  <section class="stage stage-about" data-stage="1">
-    <div class="stage-label">
-      <span class="stage-label-num">/01</span>
-      <span class="stage-label-name">PROFILE</span>
-    </div>
+  <!-- ============ PROFILE ============ -->
+  <section class="section" id="about" aria-labelledby="about-title">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <h2 class="section-title" id="about-title">Profile</h2>
+      </div>
 
-    <div class="about-grid">
-      <div class="about-text">
-        <h2 class="about-heading">
-          <span class="reveal-line">Researching the geometry of</span>
-          <span class="reveal-line"><em>perception</em>, <em>language</em>,</span>
-          <span class="reveal-line">and <em>action</em>.</span>
-        </h2>
-        <p class="about-body">
-          I work at the bleeding edge of <strong>multimodal diffusion</strong> and
+      <div class="prose">
+        <p>
+          I work at the edge of <strong>multimodal diffusion</strong> and
           <strong>spatial intelligence</strong> — designing
-          <strong>physics-informed neural world models</strong>, vision-language-action
-          architectures, and synthetic data pipelines that turn raw sensor signals into
-          production-grade scene understanding. Across deep-tech and defense-oriented
-          perception, I ship systems that <em>see</em> beyond line-of-sight,
-          <em>reason</em> across modalities, and <em>act</em> on the edge.
+          <strong>physics-informed neural world models</strong>,
+          vision-language-action architectures, and synthetic data pipelines
+          that turn raw sensor signals into production-grade scene
+          understanding. Across deep-tech and defense-oriented perception, I
+          ship systems that see beyond line-of-sight, reason across modalities,
+          and act on the edge.
         </p>
-        <div class="about-keywords">
-          <span>Multimodal Diffusion</span>
-          <span>Neural World Models</span>
-          <span>VLA Architectures</span>
-          <span>Neural Radiance Fields</span>
-          <span>Synthetic Data</span>
-          <span>Thermal / IR Sensing</span>
-          <span>3D Reconstruction</span>
-          <span>Agentic AI</span>
-          <span>Edge Vision</span>
-        </div>
+        <p>
+          Four peer-reviewed publications, ongoing research at Thoughtrons, and
+          open to collaborations in deep-tech and defense.
+        </p>
       </div>
 
-      <div class="about-stats">
-        <div class="stat stat-pubs" id="stat-pubs" tabindex="0" aria-label="View publications">
-          <div class="stat-corner">◢</div>
-          <div class="stat-num" data-target="4">0</div>
-          <div class="stat-label">Peer-Reviewed Publications</div>
-          <div class="stat-hint">HOVER TO VIEW LIST</div>
-        </div>
-        <div class="stat stat-now">
-          <div class="stat-now-pulse" aria-hidden="true"></div>
-          <div class="stat-text">LIVE</div>
-          <div class="stat-label">Research Scientist · Thoughtrons · Multimodal AI</div>
-        </div>
-        <div class="stat">
-          <div class="stat-text stat-text-sm">FRONTIER</div>
-          <div class="stat-label">World Models · Diffusion · VLA · Spatial AI</div>
-        </div>
-        <div class="stat">
-          <div class="stat-text">OPEN</div>
-          <div class="stat-label">to Deep-Tech &amp; Defense Collaborations</div>
-        </div>
-      </div>
-    </div>
+      <ul class="tags" aria-label="Focus areas">
+        <li>Multimodal Diffusion</li>
+        <li>Neural World Models</li>
+        <li>VLA Architectures</li>
+        <li>Neural Radiance Fields</li>
+        <li>Synthetic Data</li>
+        <li>Thermal / IR Sensing</li>
+        <li>3D Reconstruction</li>
+        <li>Agentic AI</li>
+        <li>Edge Vision</li>
+      </ul>
 
-    <!-- Honors strip -->
-    <div class="honors-strip">
-      <span class="honors-label">RECOGNITION</span>
-      <span class="honor-pill"><span class="honor-dot"></span>Google Youth AI · Top 5 globally</span>
-      <span class="honor-pill"><span class="honor-dot"></span>UNESCO Hackathon · Top 96 worldwide</span>
-      <span class="honor-pill"><span class="honor-dot"></span>E-Summit IIT Kanpur · 3rd Rank</span>
+      <div class="subblock">
+        <h3 class="subblock-title">Recognition</h3>
+        <ul class="plain-list">
+          <li>Google Youth AI — Top 5 globally</li>
+          <li>UNESCO Hackathon — Top 96 worldwide</li>
+          <li>E-Summit, IIT Kanpur — 3rd rank</li>
+        </ul>
+      </div>
     </div>
   </section>
 
-  <!-- ============ STAGE 2 — STACK ============ -->
-  <section class="stage stage-skills" data-stage="2">
-    <div class="stage-label">
-      <span class="stage-label-num">/02</span>
-      <span class="stage-label-name">STACK</span>
-    </div>
-
-    <h2 class="skills-heading">
-      <span class="skills-heading-line">Tools of</span>
-      <span class="skills-heading-line">the trade.</span>
-    </h2>
-
-    <div class="skills-constellation" id="skills-constellation"></div>
-
-    <div class="skills-legend">
-      <div class="legend-item"><span class="legend-color legend-color-frontier"></span>FRONTIER</div>
-      <div class="legend-item"><span class="legend-color legend-color-vision"></span>VISION</div>
-      <div class="legend-item"><span class="legend-color legend-color-llm"></span>LLM / AGENTS</div>
-      <div class="legend-item"><span class="legend-color legend-color-infra"></span>INFRA / MLOPS</div>
-      <div class="legend-item"><span class="legend-color legend-color-base"></span>FOUNDATION</div>
-    </div>
-  </section>
-
-  <!-- ============ STAGE 3 — NOW / TRAJECTORY ============ -->
-  <section class="stage stage-experience" data-stage="3">
-    <div class="stage-label">
-      <span class="stage-label-num">/03</span>
-      <span class="stage-label-name">NOW &amp; TRAJECTORY</span>
-    </div>
-
-    <h2 class="exp-heading">
-      <span class="reveal-line">Trajectory.</span>
-    </h2>
-
-    <div class="timeline">
-      <div class="timeline-axis"></div>
-
-      <article class="timeline-item timeline-item-now" data-index="0">
-        <div class="timeline-node timeline-node-now"></div>
-        <div class="timeline-now-badge">
-          <span class="timeline-now-pulse"></span>
-          <span>NOW</span>
-        </div>
-        <div class="timeline-date">ACTIVE · 2026</div>
-        <h3 class="timeline-role">Research Scientist</h3>
-        <div class="timeline-org">Thoughtrons</div>
-        <ul class="timeline-bullets">
-          <li><strong>Multimodal diffusion</strong> &amp; <strong>spatial intelligence</strong> — physics-informed neural world models for high-fidelity scene understanding and generation.</li>
-          <li><strong>Vision-Language-Action</strong> architectures, neural radiance integration, and synthetic refinement pipelines for deep-tech &amp; defense perception.</li>
-          <li>Synthetic data workflows with <strong>thermal / IR sensing</strong> and multi-modal environmental perception for real-world robustness.</li>
-        </ul>
-      </article>
-
-      <article class="timeline-item" data-index="1">
-        <div class="timeline-node"></div>
-        <div class="timeline-date">FEB 2026 — PRESENT</div>
-        <h3 class="timeline-role">AI Engineer</h3>
-        <div class="timeline-org">ITGo Labs · Mumbai</div>
-        <ul class="timeline-bullets">
-          <li>Computer vision systems for defense UAV / drone applications — real-time perception &amp; target detection.</li>
-          <li>YOLO and Vision Transformer optimization for resource-constrained edge hardware.</li>
-        </ul>
-      </article>
-
-      <article class="timeline-item" data-index="2">
-        <div class="timeline-node"></div>
-        <div class="timeline-date">JAN 2026 — PRESENT</div>
-        <h3 class="timeline-role">Open Source Contributor</h3>
-        <div class="timeline-org">aden-hive · Agentic AI Infrastructure</div>
-        <ul class="timeline-bullets">
-          <li>Multi-agent pipelines, LLM workflows, tool-integrated reasoning systems.</li>
-          <li>3+ pull requests improving LLM execution, agent routing, Docker deployment.</li>
-        </ul>
-      </article>
-
-      <article class="timeline-item" data-index="3">
-        <div class="timeline-node"></div>
-        <div class="timeline-date">JUN 2025 — NOV 2025</div>
-        <h3 class="timeline-role">R&amp;D Trainee</h3>
-        <div class="timeline-org">DRDO · Ministry of Defence, Govt. of India</div>
-        <ul class="timeline-bullets">
-          <li>NLoS imaging with Galvo scanner &amp; pulse laser for deep-learning 3D reconstruction.</li>
-          <li>Single-Pixel Camera achieving 3D reconstruction with 5% image capture — 80% acquisition reduction.</li>
-        </ul>
-      </article>
-
-      <article class="timeline-item" data-index="4">
-        <div class="timeline-node"></div>
-        <div class="timeline-date">SEP 2024 — MAR 2025</div>
-        <h3 class="timeline-role">ML Research Intern</h3>
-        <div class="timeline-org">Dr. Sanjan TP Gupta · Univ. of Wisconsin Madison / IIT-Madras Honors Alum</div>
-        <ul class="timeline-bullets">
-          <li>Graph Convolutional Networks (GCNs) for chemical toxicity prediction.</li>
-          <li>Improved model accuracy and interpretability in cheminformatics workflows.</li>
-        </ul>
-      </article>
-
-      <article class="timeline-item" data-index="5">
-        <div class="timeline-node"></div>
-        <div class="timeline-date">FEB 2024 — SEP 2024</div>
-        <h3 class="timeline-role">Volunteer Data Scientist</h3>
-        <div class="timeline-org">Teens in AI · Leicester, UK · Remote</div>
-        <ul class="timeline-bullets">
-          <li>Data analytics reports and interactive dashboards for global techathons.</li>
-          <li>Operational visibility across 10+ countries' programs.</li>
-        </ul>
-      </article>
-    </div>
-  </section>
-
-  <!-- ============ STAGE 4 — WORK ============ -->
-  <section class="stage stage-projects" data-stage="4">
-    <div class="stage-label">
-      <span class="stage-label-num">/04</span>
-      <span class="stage-label-name">WORK</span>
-    </div>
-
-    <h2 class="projects-heading">
-      <span class="reveal-line">Selected</span>
-      <span class="reveal-line">builds.</span>
-    </h2>
-
-    <!-- Flagship: Orchestraty -->
-    <article class="project-flagship" data-index="0">
-      <div class="project-flagship-inner">
-        <div class="flagship-aurora" aria-hidden="true"></div>
-
-        <!-- Top meta strip -->
-        <div class="flagship-topbar">
-          <div class="flagship-topbar-group">
-            <span class="flagship-badge"><span class="flagship-badge-pulse"></span>FLAGSHIP · IN DEVELOPMENT</span>
-            <span class="flagship-version">v0.9 · PRIVATE BETA</span>
-            <span class="flagship-tag">AI OPERATING SYSTEM</span>
-          </div>
-          <div class="flagship-topbar-group flagship-topbar-right">
-            <span class="flagship-sysid">SYS · ORC-001</span>
-            <span class="flagship-sysid">REGION · GLOBAL</span>
-          </div>
-        </div>
-
-        <!-- Hero: title + description -->
-        <div class="flagship-hero">
-          <div class="flagship-hero-left">
-            <h3 class="flagship-title">Orchestraty</h3>
-            <div class="flagship-subtitle">The AI Operating System for production-ready data.</div>
-          </div>
-          <div class="flagship-hero-right">
-            <p class="flagship-desc">
-              Built by a team obsessed with one question: <em>why is getting data
-              production-ready still so painful?</em> Orchestraty brings <strong>structure</strong>,
-              <strong>intelligence</strong>, and <strong>automation</strong> to the
-              entire data lifecycle — from raw ingestion to production-ready output.
-              No more stitching together dozens of tools. One system orchestrates everything.
-            </p>
-          </div>
-        </div>
-
-        <!-- 5 Pillars -->
-        <div class="flagship-pillars">
-          <div class="flagship-pillar">
-            <span class="flagship-pillar-num">01</span>
-            <strong>INGEST</strong>
-            <span class="flagship-pillar-desc">Multi-source intake · schema discovery · streaming connectors</span>
-          </div>
-          <div class="flagship-pillar">
-            <span class="flagship-pillar-num">02</span>
-            <strong>STRUCTURE</strong>
-            <span class="flagship-pillar-desc">Schema-aware normalization · lineage tracking · auto-typing</span>
-          </div>
-          <div class="flagship-pillar">
-            <span class="flagship-pillar-num">03</span>
-            <strong>ANNOTATE</strong>
-            <span class="flagship-pillar-desc">Multi-LLM consensus labeling · routing · confidence scoring</span>
-          </div>
-          <div class="flagship-pillar">
-            <span class="flagship-pillar-num">04</span>
-            <strong>PERCEIVE</strong>
-            <span class="flagship-pillar-desc">CLIP vision · semantic embeddings · cross-modal search</span>
-          </div>
-          <div class="flagship-pillar">
-            <span class="flagship-pillar-num">05</span>
-            <strong>SHIP</strong>
-            <span class="flagship-pillar-desc">Automated workflows · CI/CD for data · production-ready output</span>
-          </div>
-        </div>
-
-        <!-- Coming-soon status bar -->
-        <div class="flagship-statusbar">
-          <div class="flagship-livefeed">
-            <span class="flagship-livefeed-dot"></span>
-            <span class="flagship-livefeed-label">SNEAK PEEK</span>
-            <span class="flagship-livefeed-text" id="orch-livefeed">Multi-LLM consensus labeling at scale</span>
-          </div>
-
-          <div class="flagship-countdown" aria-label="Launch countdown">
-            <span class="flagship-countdown-label">LAUNCHING IN</span>
-            <div class="flagship-countdown-row">
-              <div class="countdown-segment">
-                <span class="countdown-digit" id="countdown-dd"><span class="d-old">00</span><span class="d-new">00</span></span>
-                <span class="countdown-segment-label">DAYS</span>
-              </div>
-              <span class="countdown-sep">:</span>
-              <div class="countdown-segment">
-                <span class="countdown-digit" id="countdown-hh"><span class="d-old">00</span><span class="d-new">00</span></span>
-                <span class="countdown-segment-label">HRS</span>
-              </div>
-              <span class="countdown-sep">:</span>
-              <div class="countdown-segment">
-                <span class="countdown-digit" id="countdown-mm"><span class="d-old">00</span><span class="d-new">00</span></span>
-                <span class="countdown-segment-label">MIN</span>
-              </div>
-              <span class="countdown-sep">:</span>
-              <div class="countdown-segment">
-                <span class="countdown-digit" id="countdown-ss"><span class="d-old">00</span><span class="d-new">00</span></span>
-                <span class="countdown-segment-label">SEC</span>
-              </div>
-            </div>
-          </div>
-
-          <a href="https://www.orchestraty.com" target="_blank" rel="noopener noreferrer" class="flagship-cta magnetic">
-            <span>orchestraty.com</span>
-            <span class="flagship-cta-arrow">↗</span>
-          </a>
-        </div>
+  <!-- ============ EXPERIENCE ============ -->
+  <section class="section" id="experience" aria-labelledby="experience-title">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <h2 class="section-title" id="experience-title">Experience</h2>
       </div>
-    </article>
 
-    <!-- Supporting projects grid -->
-    <div class="projects-deck" id="projects-deck">
-      <article class="project-card" data-index="1">
-        <div class="project-card-inner">
-          <div class="project-meta">
+      <ol class="timeline">
+        <li class="entry">
+          <div class="entry-when">
+            <span class="entry-date">2026 — Present</span>
+            <span class="entry-now">Now</span>
+          </div>
+          <div class="entry-body">
+            <h3 class="entry-role">Research Scientist</h3>
+            <p class="entry-org">Thoughtrons</p>
+            <ul class="entry-points">
+              <li><strong>Multimodal diffusion</strong> &amp; <strong>spatial intelligence</strong> — physics-informed neural world models for high-fidelity scene understanding and generation.</li>
+              <li>Vision-Language-Action architectures, neural radiance integration, and synthetic refinement pipelines for deep-tech &amp; defense perception.</li>
+              <li>Synthetic data workflows with thermal / IR sensing and multi-modal environmental perception for real-world robustness.</li>
+            </ul>
+          </div>
+        </li>
+
+        <li class="entry">
+          <div class="entry-when">
+            <span class="entry-date">Feb 2026 — Present</span>
+          </div>
+          <div class="entry-body">
+            <h3 class="entry-role">AI Engineer</h3>
+            <p class="entry-org">ITGo Labs · Mumbai</p>
+            <ul class="entry-points">
+              <li>Computer vision systems for defense UAV / drone applications — real-time perception &amp; target detection.</li>
+              <li>YOLO and Vision Transformer optimization for resource-constrained edge hardware.</li>
+            </ul>
+          </div>
+        </li>
+
+        <li class="entry">
+          <div class="entry-when">
+            <span class="entry-date">Jan 2026 — Present</span>
+          </div>
+          <div class="entry-body">
+            <h3 class="entry-role">Open Source Contributor</h3>
+            <p class="entry-org">aden-hive · Agentic AI Infrastructure</p>
+            <ul class="entry-points">
+              <li>Multi-agent pipelines, LLM workflows, and tool-integrated reasoning systems.</li>
+              <li>3+ pull requests improving LLM execution, agent routing, and Docker deployment.</li>
+            </ul>
+          </div>
+        </li>
+
+        <li class="entry">
+          <div class="entry-when">
+            <span class="entry-date">Jun 2025 — Nov 2025</span>
+          </div>
+          <div class="entry-body">
+            <h3 class="entry-role">R&amp;D Trainee</h3>
+            <p class="entry-org">DRDO · Ministry of Defence, Govt. of India</p>
+            <ul class="entry-points">
+              <li>NLoS imaging with a Galvo scanner &amp; pulse laser for deep-learning 3D reconstruction.</li>
+              <li>Single-Pixel Camera achieving 3D reconstruction from 5% image capture — an 80% acquisition reduction.</li>
+            </ul>
+          </div>
+        </li>
+
+        <li class="entry">
+          <div class="entry-when">
+            <span class="entry-date">Sep 2024 — Mar 2025</span>
+          </div>
+          <div class="entry-body">
+            <h3 class="entry-role">ML Research Intern</h3>
+            <p class="entry-org">Dr. Sanjan TP Gupta · Univ. of Wisconsin–Madison / IIT-Madras Honors Alum</p>
+            <ul class="entry-points">
+              <li>Graph Convolutional Networks (GCNs) for chemical toxicity prediction.</li>
+              <li>Improved model accuracy and interpretability in cheminformatics workflows.</li>
+            </ul>
+          </div>
+        </li>
+
+        <li class="entry">
+          <div class="entry-when">
+            <span class="entry-date">Feb 2024 — Sep 2024</span>
+          </div>
+          <div class="entry-body">
+            <h3 class="entry-role">Volunteer Data Scientist</h3>
+            <p class="entry-org">Teens in AI · Leicester, UK · Remote</p>
+            <ul class="entry-points">
+              <li>Data analytics reports and interactive dashboards for global techathons.</li>
+              <li>Operational visibility across 10+ countries' programs.</li>
+            </ul>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ SKILLS ============ -->
+  <section class="section" id="skills" aria-labelledby="skills-title">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-num">03</span>
+        <h2 class="section-title" id="skills-title">Skills</h2>
+      </div>
+
+      <dl class="skills">
+        <div class="skill-group">
+          <dt>Frontier</dt>
+          <dd>Multimodal Diffusion · World Models · VLA · NeRF · Synthetic Data · Thermal / IR · Spatial Intelligence</dd>
+        </div>
+        <div class="skill-group">
+          <dt>Foundation</dt>
+          <dd>Python · PyTorch · TensorFlow · C++ · SQL</dd>
+        </div>
+        <div class="skill-group">
+          <dt>Vision</dt>
+          <dd>YOLO · ViT · Jetson · 3D Reconstruction · TensorRT</dd>
+        </div>
+        <div class="skill-group">
+          <dt>LLM / Agents</dt>
+          <dd>HuggingFace · LangChain · LangGraph · CrewAI · RAG · MCP · vLLM · Ollama · FAISS</dd>
+        </div>
+        <div class="skill-group">
+          <dt>Infra / MLOps</dt>
+          <dd>Docker · FastAPI · MLflow · AWS</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ============ WORK ============ -->
+  <section class="section" id="work" aria-labelledby="work-title">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-num">04</span>
+        <h2 class="section-title" id="work-title">Selected Work</h2>
+      </div>
+
+      <!-- Flagship -->
+      <article class="flagship">
+        <div class="flagship-head">
+          <h3 class="flagship-title">Orchestraty</h3>
+          <span class="badge">Flagship · Private Beta</span>
+        </div>
+        <p class="flagship-sub">The AI Operating System for production-ready data.</p>
+        <p class="flagship-desc">
+          Built by a team obsessed with one question: why is getting data
+          production-ready still so painful? Orchestraty brings structure,
+          intelligence, and automation to the entire data lifecycle — from raw
+          ingestion to production-ready output. No more stitching together
+          dozens of tools; one system orchestrates everything.
+        </p>
+        <ol class="pillars">
+          <li><span class="pillar-num">01</span> <strong>Ingest</strong> — multi-source intake, schema discovery, streaming connectors.</li>
+          <li><span class="pillar-num">02</span> <strong>Structure</strong> — schema-aware normalization, lineage tracking, auto-typing.</li>
+          <li><span class="pillar-num">03</span> <strong>Annotate</strong> — multi-LLM consensus labeling, routing, confidence scoring.</li>
+          <li><span class="pillar-num">04</span> <strong>Perceive</strong> — CLIP vision, semantic embeddings, cross-modal search.</li>
+          <li><span class="pillar-num">05</span> <strong>Ship</strong> — automated workflows, CI/CD for data, production-ready output.</li>
+        </ol>
+        <p class="flagship-foot">
+          <a href="https://www.orchestraty.com" target="_blank" rel="noopener">orchestraty.com&nbsp;↗</a>
+          <span class="dot">·</span> Launching 2026
+        </p>
+      </article>
+
+      <!-- Supporting projects -->
+      <ol class="projects">
+        <li class="project">
+          <div class="project-top">
             <span class="project-num">001</span>
             <span class="project-year">2025 · DRDO</span>
           </div>
           <h3 class="project-title">Non-Line-of-Sight Imaging</h3>
           <p class="project-desc">
-            Building a system that reconstructs scenes hidden behind obstacles —
-            indirect light reflections + temporal signals + physics-aware deep learning
-            to recover geometry and motion outside the camera's field of view.
+            Reconstructs scenes hidden behind obstacles — indirect light
+            reflections, temporal signals, and physics-aware deep learning to
+            recover geometry and motion outside the camera's field of view.
           </p>
-          <div class="project-stack">
-            <span>Computer Vision</span><span>Computational Optics</span><span>Deep Learning</span><span>NLoS</span>
-          </div>
-          <div class="project-impact">
-            <span class="impact-bar"><span class="impact-fill" style="--p:92%"></span></span>
-            <span class="impact-label">PHYSICS-AWARE PERCEPTION</span>
-          </div>
-        </div>
-      </article>
+          <ul class="tags tags-sm">
+            <li>Computer Vision</li><li>Computational Optics</li><li>Deep Learning</li><li>NLoS</li>
+          </ul>
+          <p class="project-note">Physics-aware perception</p>
+        </li>
 
-      <article class="project-card" data-index="2">
-        <div class="project-card-inner">
-          <div class="project-meta">
+        <li class="project">
+          <div class="project-top">
             <span class="project-num">002</span>
             <span class="project-year">2025 · DRDO</span>
           </div>
           <h3 class="project-title">Single-Pixel Camera</h3>
           <p class="project-desc">
-            Reconstructs full scenes from a single photodetector via structured-light
-            projection and compressed sensing — 3D recovery from <strong>~5% capture</strong>,
-            80% acquisition reduction.
+            Reconstructs full scenes from a single photodetector via
+            structured-light projection and compressed sensing — 3D recovery
+            from ~5% capture, an 80% acquisition reduction.
           </p>
-          <div class="project-stack">
-            <span>Compressed Sensing</span><span>Computational Imaging</span><span>Signal Processing</span><span>ML Reconstruction</span>
-          </div>
-          <div class="project-impact">
-            <span class="impact-bar"><span class="impact-fill" style="--p:80%"></span></span>
-            <span class="impact-label">5% CAPTURE → FULL 3D SCENE</span>
-          </div>
-        </div>
-      </article>
+          <ul class="tags tags-sm">
+            <li>Compressed Sensing</li><li>Computational Imaging</li><li>Signal Processing</li><li>ML Reconstruction</li>
+          </ul>
+          <p class="project-note">5% capture → full 3D scene</p>
+        </li>
 
-      <article class="project-card" data-index="3">
-        <div class="project-card-inner">
-          <div class="project-meta">
+        <li class="project">
+          <div class="project-top">
             <span class="project-num">003</span>
-            <span class="project-year">2022 — 2025 · IEEE</span>
+            <span class="project-year">2022–2025 · IEEE</span>
           </div>
           <h3 class="project-title">Smart Glasses for the Blind</h3>
           <p class="project-desc">
-            Real-time obstacle detection + currency recognition + SOS + on-device AI
-            assistant on NVIDIA Jetson — paper published in IEEE Xplore.
+            Real-time obstacle detection, currency recognition, SOS, and an
+            on-device AI assistant on NVIDIA Jetson — published in IEEE Xplore.
           </p>
-          <div class="project-stack">
-            <span>YOLOv6</span><span>SSD MobileNet</span><span>Jetson TX2</span><span>OpenCV</span><span>Arduino</span>
-          </div>
-          <div class="project-impact">
-            <span class="impact-bar"><span class="impact-fill" style="--p:90%"></span></span>
-            <span class="impact-label">EDGE PERCEPTION · IEEE PUBLISHED</span>
-          </div>
-        </div>
-      </article>
+          <ul class="tags tags-sm">
+            <li>YOLOv6</li><li>SSD MobileNet</li><li>Jetson TX2</li><li>OpenCV</li><li>Arduino</li>
+          </ul>
+          <p class="project-note">Edge perception · IEEE published</p>
+        </li>
 
-      <article class="project-card" data-index="4">
-        <div class="project-card-inner">
-          <div class="project-meta">
+        <li class="project">
+          <div class="project-top">
             <span class="project-num">004</span>
             <span class="project-year">2024</span>
           </div>
           <h3 class="project-title">Whisper · LoRA · Hindi ASR</h3>
           <p class="project-desc">
-            Fine-tuned OpenAI Whisper with LoRA / PEFT for Hindi speech. <strong>WER 84.6 → 68.7</strong>
-            with a disfluency-detection pipeline validated across 175K tokens.
+            Fine-tuned OpenAI Whisper with LoRA / PEFT for Hindi speech.
+            WER 84.6 → 68.7 with a disfluency-detection pipeline validated
+            across 175K tokens.
           </p>
-          <div class="project-stack">
-            <span>PyTorch</span><span>Whisper</span><span>LoRA / PEFT</span><span>HuggingFace</span>
-          </div>
-          <div class="project-impact">
-            <span class="impact-bar"><span class="impact-fill" style="--p:81%"></span></span>
-            <span class="impact-label">WER ↓ 19% · DISFLUENCY 85%</span>
-          </div>
-        </div>
-      </article>
+          <ul class="tags tags-sm">
+            <li>PyTorch</li><li>Whisper</li><li>LoRA / PEFT</li><li>HuggingFace</li>
+          </ul>
+          <p class="project-note">WER down 19% · disfluency 85%</p>
+        </li>
 
-      <article class="project-card" data-index="5">
-        <div class="project-card-inner">
-          <div class="project-meta">
+        <li class="project">
+          <div class="project-top">
             <span class="project-num">005</span>
             <span class="project-year">2025</span>
           </div>
           <h3 class="project-title">AI FinOps &amp; Risk Intelligence</h3>
           <p class="project-desc">
-            OCR + LLMs + vector search + rule-based validation. <strong>80% reduction</strong>
-            in manual finance review with 90–95% structured-extraction reliability.
+            OCR, LLMs, vector search, and rule-based validation. An 80%
+            reduction in manual finance review with 90–95% structured-extraction
+            reliability.
           </p>
-          <div class="project-stack">
-            <span>FastAPI</span><span>Ollama</span><span>OpenAI API</span><span>RAG</span><span>OCR</span>
-          </div>
-          <div class="project-impact">
-            <span class="impact-bar"><span class="impact-fill" style="--p:95%"></span></span>
-            <span class="impact-label">EXTRACTION 90–95% RELIABLE</span>
-          </div>
-        </div>
-      </article>
+          <ul class="tags tags-sm">
+            <li>FastAPI</li><li>Ollama</li><li>OpenAI API</li><li>RAG</li><li>OCR</li>
+          </ul>
+          <p class="project-note">Extraction 90–95% reliable</p>
+        </li>
+      </ol>
     </div>
   </section>
 
-  <!-- ============ STAGE 5 — CONTACT ============ -->
-  <section class="stage stage-contact" data-stage="5">
-    <div class="stage-label">
-      <span class="stage-label-num">/05</span>
-      <span class="stage-label-name">CONTACT</span>
+  <!-- ============ PUBLICATIONS ============ -->
+  <section class="section" id="publications" aria-labelledby="publications-title">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-num">05</span>
+        <h2 class="section-title" id="publications-title">Publications</h2>
+      </div>
+
+      <ol class="pubs">
+        <li class="pub">
+          <a href="https://dx.doi.org/10.2139/ssrn.5222180" target="_blank" rel="noopener">
+            <span class="pub-title">Decoding Toxicity: Unveiling Hidden Molecular Patterns with Graph Neural Networks</span>
+            <span class="pub-meta">ICAIN / SSRN · Apr 2025&nbsp;↗</span>
+          </a>
+        </li>
+        <li class="pub">
+          <a href="https://ieeexplore.ieee.org/document/10303495" target="_blank" rel="noopener">
+            <span class="pub-title">Smart Glasses for Blind People Using Obstacle Detection</span>
+            <span class="pub-meta">IEEE Xplore · Nov 2023&nbsp;↗</span>
+          </a>
+        </li>
+        <li class="pub">
+          <a href="https://dx.doi.org/10.2139/ssrn.5221231" target="_blank" rel="noopener">
+            <span class="pub-title">Advanced Path-Planning Algorithms on NVIDIA Jetson TX2 for Assistive Technologies</span>
+            <span class="pub-meta">COMSIA · 2025&nbsp;↗</span>
+          </a>
+        </li>
+        <li class="pub">
+          <a href="https://tinyurl.com/securingsmartglasses" target="_blank" rel="noopener">
+            <span class="pub-title">Securing Assistive Smart Glasses: A Framework for Mitigating Cybersecurity Threats</span>
+            <span class="pub-meta">ICRTICC · 2025&nbsp;↗</span>
+          </a>
+        </li>
+      </ol>
     </div>
+  </section>
 
-    <div class="contact-center">
-      <h2 class="contact-heading">
-        <span class="reveal-line">Let's build</span>
-        <span class="reveal-line">something <em>impossible</em>.</span>
-      </h2>
-
-      <a href="mailto:samratsharma979@gmail.com?subject=Let%27s%20build%20something" class="contact-mail magnetic">
-        <span class="contact-mail-text">Send me a message</span>
-        <span class="contact-mail-arrow">→</span>
-      </a>
-
-      <div class="contact-links">
-        <a href="https://github.com/samratrajsharma" target="_blank" rel="noopener" class="contact-link magnetic">
-          <span class="contact-link-label">GITHUB</span>
-          <span class="contact-link-handle">@samratrajsharma</span>
-        </a>
-        <a href="https://www.linkedin.com/in/samrat--sharma" target="_blank" rel="noopener" class="contact-link magnetic">
-          <span class="contact-link-label">LINKEDIN</span>
-          <span class="contact-link-handle">in/samrat--sharma</span>
-        </a>
+  <!-- ============ CONTACT ============ -->
+  <section class="section section-contact" id="contact" aria-labelledby="contact-title">
+    <div class="container">
+      <div class="section-head">
+        <span class="section-num">06</span>
+        <h2 class="section-title" id="contact-title">Contact</h2>
       </div>
 
-      <div class="contact-footer">
-        <span>© 2026 Samrat Raj Sharma</span>
-      </div>
+      <p class="contact-lead">
+        Open to research collaborations in deep-tech and defense — and to a good
+        conversation about world models, perception, and agents.
+      </p>
+
+      <a class="contact-email" href="mailto:samratsharma979@gmail.com">samratsharma979@gmail.com</a>
+
+      <ul class="contact-links">
+        <li><a href="https://github.com/samratrajsharma" target="_blank" rel="noopener">GitHub — @samratrajsharma</a></li>
+        <li><a href="https://www.linkedin.com/in/samrat--sharma" target="_blank" rel="noopener">LinkedIn — in/samrat--sharma</a></li>
+      </ul>
     </div>
   </section>
 
 </main>
 
-<!-- ============ PUBLICATIONS POPUP ============ -->
-<div class="pubs-popup" id="pubs-popup" aria-hidden="true">
-  <div class="pubs-popup-header">
-    <span class="pubs-popup-title">PEER-REVIEWED WORK</span>
-    <span class="pubs-popup-count">4 publications</span>
+<footer class="footer">
+  <div class="container footer-inner">
+    <span>© 2026 Samrat Raj Sharma</span>
+    <a href="#top">Back to top ↑</a>
   </div>
-  <a class="pub-item" href="https://dx.doi.org/10.2139/ssrn.5222180" target="_blank" rel="noopener">
-    <div class="pub-item-main">
-      <div class="pub-item-title">Decoding Toxicity: Unveiling Hidden Molecular Patterns with Graph Neural Networks</div>
-      <div class="pub-item-meta">ICAIN / SSRN · Apr 2025</div>
-    </div>
-    <span class="pub-item-arrow">↗</span>
-  </a>
-  <a class="pub-item" href="https://ieeexplore.ieee.org/document/10303495" target="_blank" rel="noopener">
-    <div class="pub-item-main">
-      <div class="pub-item-title">Smart Glasses for Blind People Using Obstacle Detection</div>
-      <div class="pub-item-meta">IEEE Xplore · Nov 2023</div>
-    </div>
-    <span class="pub-item-arrow">↗</span>
-  </a>
-  <a class="pub-item" href="https://dx.doi.org/10.2139/ssrn.5221231" target="_blank" rel="noopener">
-    <div class="pub-item-main">
-      <div class="pub-item-title">Advanced Path-Planning Algorithms on NVIDIA Jetson TX2 for Assistive Technologies</div>
-      <div class="pub-item-meta">COMSIA · 2025</div>
-    </div>
-    <span class="pub-item-arrow">↗</span>
-  </a>
-  <a class="pub-item" href="https://tinyurl.com/securingsmartglasses" target="_blank" rel="noopener">
-    <div class="pub-item-main">
-      <div class="pub-item-title">Securing Assistive Smart Glasses: Framework for Mitigating Cybersecurity Threats</div>
-      <div class="pub-item-meta">ICRTICC · 2025</div>
-    </div>
-    <span class="pub-item-arrow">↗</span>
-  </a>
-</div>
+</footer>
 
 <script src="script.js"></script>
 </body>
