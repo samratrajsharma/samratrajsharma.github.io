@@ -195,6 +195,8 @@ window.googleTranslateElementInit = function () {
   /* ---- first-visit hint: cycling greetings + arrow to the pill ---- */
   const hint = document.getElementById('lang-hint');
   const greetEl = document.getElementById('lang-hint-greet');
+  const typeEl = document.getElementById('lang-hint-text');
+  const hintReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let greetTimer = null, hideTimer = null, dismissed = false;
 
   function dismissHint() {
@@ -209,6 +211,7 @@ window.googleTranslateElementInit = function () {
   if (hint && greetEl && read('langHintSeen', '') !== '1') {
     const greetings = ['Hello', 'Hallo', 'Bonjour', 'Hola', 'नमस्ते', 'こんにちは', '你好', 'Olá'];
     let i = 0;
+    const message = 'Please select your preferred language';
     setTimeout(() => {
       if (dismissed) return;
       hint.removeAttribute('hidden');
@@ -217,8 +220,22 @@ window.googleTranslateElementInit = function () {
         i = (i + 1) % greetings.length;
         greetEl.style.opacity = '0';
         setTimeout(() => { greetEl.textContent = greetings[i]; greetEl.style.opacity = '1'; }, 180);
-      }, 1250);
-      hideTimer = setTimeout(dismissHint, 9000);
+      }, 1400);
+      // Typewriter: write the instruction one character at a time.
+      if (typeEl) {
+        if (hintReduced) {
+          typeEl.textContent = message;
+        } else {
+          let t = 0;
+          const type = () => {
+            if (dismissed) return;
+            typeEl.textContent = message.slice(0, t);
+            if (t < message.length) { t += 1; setTimeout(type, 42); }
+          };
+          type();
+        }
+      }
+      hideTimer = setTimeout(dismissHint, 10000);
     }, 1200);
     window.addEventListener('scroll', dismissHint, { once: true, passive: true });
   }

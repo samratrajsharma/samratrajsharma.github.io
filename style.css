@@ -242,32 +242,30 @@ a { color: inherit; }
 /* First-visit hint with arrow pointing to the pill */
 .lang-hint {
   position: absolute;
-  top: calc(100% + 14px);
+  top: calc(100% + 26px);
   right: 2px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 1px;
-  padding: 9px 13px;
+  gap: 3px;
+  padding: 10px 13px;
   background: var(--fg);
   color: var(--bg);
   border-radius: 12px;
   white-space: nowrap;
   box-shadow: 0 16px 44px -14px rgba(0, 0, 0, 0.5);
   z-index: 130;
-  animation: langHintBob 2.4s ease-in-out infinite;
+  animation: langHintIn 0.35s ease both;
 }
 .lang-hint[hidden] { display: none; }
-.lang-hint::after {
-  content: "";
+.lang-hint-arrow {
   position: absolute;
-  top: -6px;
-  right: 18px;
-  width: 13px;
-  height: 13px;
-  background: var(--fg);
-  transform: rotate(45deg);
-  border-radius: 3px 0 0 0;
+  top: -24px;
+  right: 16px;
+  width: 20px;
+  height: 20px;
+  color: var(--fg);
+  animation: langArrowBounce 1.1s ease-in-out infinite;
 }
 .lang-hint-greet {
   display: inline-block;
@@ -275,15 +273,34 @@ a { color: inherit; }
   font-weight: 600;
   transition: opacity 0.18s ease;
 }
-.lang-hint-label {
+.lang-hint-type {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.2em;
   font-family: var(--font-mono);
   font-size: 10.5px;
-  letter-spacing: 0.04em;
-  opacity: 0.85;
+  letter-spacing: 0.03em;
+  opacity: 0.9;
 }
-@keyframes langHintBob {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
+.lang-hint-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  margin-left: 2px;
+  background: currentColor;
+  animation: caretBlink 0.8s steps(1, end) infinite;
+}
+@keyframes langHintIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes langArrowBounce {
+  0%, 100% { transform: translateY(2px); opacity: 0.5; }
+  50% { transform: translateY(-4px); opacity: 1; }
+}
+@keyframes caretBlink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
 }
 
 /* Neutralize Google Translate's injected chrome */
@@ -307,7 +324,10 @@ html.translated-ltr body,
 html.translated-rtl body { top: 0 !important; }
 
 @media (prefers-reduced-motion: reduce) {
-  .lang-hint { animation: none; }
+  .lang-hint,
+  .lang-hint-arrow,
+  .lang-hint-caret { animation: none !important; }
+  .lang-hint-caret { opacity: 1; }
 }
 
 /* ============== HERO ============== */
