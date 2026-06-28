@@ -9,6 +9,17 @@
 <meta name="theme-color" content="#0b0b0b" media="(prefers-color-scheme: dark)" />
 <title>Samrat Raj Sharma — Research Scientist · AI / Multimodal Systems</title>
 
+<!-- Set theme before paint to avoid a flash -->
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+  })();
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -24,14 +35,47 @@
 <!-- ============ NAV ============ -->
 <nav class="nav" aria-label="Primary">
   <div class="nav-inner">
-    <a class="nav-name" href="#top">Samrat Raj Sharma</a>
-    <div class="nav-links">
-      <a href="#about">About</a>
-      <a href="#experience">Experience</a>
-      <a href="#skills">Skills</a>
-      <a href="#work">Work</a>
-      <a href="#publications">Publications</a>
-      <a href="#contact">Contact</a>
+    <a class="nav-name notranslate" translate="no" href="#top">Samrat Raj Sharma</a>
+    <div class="nav-controls notranslate" translate="no">
+      <div class="lang-switch" id="lang-switch">
+        <button class="lang-btn" id="lang-btn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Choose language">
+          <svg class="lang-globe" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          <span class="lang-code" id="lang-code">EN</span>
+          <svg class="lang-caret" viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M6 9l6 6 6-6"></path>
+          </svg>
+        </button>
+        <ul class="lang-menu" id="lang-menu" role="listbox" aria-label="Language">
+          <li class="lang-option is-current" role="option" data-lang="en" tabindex="0"><span class="lang-name">English</span><span class="lang-tag">EN</span></li>
+          <li class="lang-option" role="option" data-lang="de" tabindex="0"><span class="lang-name">Deutsch</span><span class="lang-tag">DE</span></li>
+          <li class="lang-option" role="option" data-lang="fr" tabindex="0"><span class="lang-name">Français</span><span class="lang-tag">FR</span></li>
+          <li class="lang-option" role="option" data-lang="es" tabindex="0"><span class="lang-name">Español</span><span class="lang-tag">ES</span></li>
+          <li class="lang-option" role="option" data-lang="hi" tabindex="0"><span class="lang-name">हिन्दी</span><span class="lang-tag">HI</span></li>
+          <li class="lang-option" role="option" data-lang="ja" tabindex="0"><span class="lang-name">日本語</span><span class="lang-tag">JA</span></li>
+          <li class="lang-option" role="option" data-lang="zh-CN" tabindex="0"><span class="lang-name">中文</span><span class="lang-tag">ZH</span></li>
+          <li class="lang-option" role="option" data-lang="pt" tabindex="0"><span class="lang-name">Português</span><span class="lang-tag">PT</span></li>
+          <li class="lang-option" role="option" data-lang="it" tabindex="0"><span class="lang-name">Italiano</span><span class="lang-tag">IT</span></li>
+          <li class="lang-option" role="option" data-lang="ru" tabindex="0"><span class="lang-name">Русский</span><span class="lang-tag">RU</span></li>
+          <li class="lang-option" role="option" data-lang="ko" tabindex="0"><span class="lang-name">한국어</span><span class="lang-tag">KO</span></li>
+        </ul>
+        <div class="lang-hint" id="lang-hint" hidden>
+          <span class="lang-hint-greet" id="lang-hint-greet">Hello</span>
+          <span class="lang-hint-label">Choose your language ↑</span>
+        </div>
+      </div>
+      <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark theme">
+        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+        </svg>
+      </button>
     </div>
   </div>
 </nav>
@@ -42,21 +86,28 @@
   <header class="hero" id="top">
     <div class="container">
       <p class="eyebrow">Research Scientist — AI / Multimodal Systems</p>
-      <h1 class="hero-name">Samrat Raj Sharma</h1>
+      <h1 class="hero-name notranslate" translate="no">Samrat Raj Sharma</h1>
       <p class="hero-tagline">
-        Building neural systems that <em>perceive</em>, <em>reason</em>, and
-        <em>act</em> in the physical world.
+        Frontier AI that <em>perceives</em>, <em>reasons</em>, and
+        <em>acts</em> — across vision, language, and the physical world.
       </p>
       <ul class="hero-meta">
         <li>Research Scientist · Thoughtrons</li>
         <li>Based in India</li>
-        <li>Open to deep-tech &amp; defense collaborations</li>
       </ul>
       <ul class="hero-links">
         <li><a href="mailto:samratsharma979@gmail.com">Email</a></li>
         <li><a href="https://github.com/samratrajsharma" target="_blank" rel="noopener">GitHub</a></li>
         <li><a href="https://www.linkedin.com/in/samrat--sharma" target="_blank" rel="noopener">LinkedIn</a></li>
       </ul>
+
+      <div class="hero-oss">
+        <span class="hero-oss-label">Open-source contributions</span>
+        <ul class="hero-links">
+          <li><a href="https://github.com/kornia/kornia" target="_blank" rel="noopener">Kornia&nbsp;↗</a></li>
+          <li><a href="https://github.com/aden-hive/hive" target="_blank" rel="noopener">aden-hive&nbsp;↗</a></li>
+        </ul>
+      </div>
     </div>
   </header>
 
@@ -70,18 +121,17 @@
 
       <div class="prose">
         <p>
-          I work at the edge of <strong>multimodal diffusion</strong> and
-          <strong>spatial intelligence</strong> — designing
-          <strong>physics-informed neural world models</strong>,
-          vision-language-action architectures, and synthetic data pipelines
-          that turn raw sensor signals into production-grade scene
-          understanding. Across deep-tech and defense-oriented perception, I
-          ship systems that see beyond line-of-sight, reason across modalities,
-          and act on the edge.
+          I build across the modern AI stack — <strong>computer vision</strong>,
+          <strong>multimodal models</strong>, <strong>LLMs</strong>, and
+          <strong>agentic systems</strong> — plus the MLOps to ship them. From
+          perception and world models to retrieval-augmented reasoning, I turn
+          frontier research into production systems that run anywhere, from the
+          cloud to the edge.
         </p>
         <p>
-          Four peer-reviewed publications, ongoing research at Thoughtrons, and
-          open to collaborations in deep-tech and defense.
+          Four peer-reviewed publications and ongoing research at Thoughtrons,
+          with hands-on work across PyTorch, LLM fine-tuning, RAG, and real-time
+          edge deployment.
         </p>
       </div>
 
@@ -149,20 +199,6 @@
 
         <li class="entry">
           <div class="entry-when">
-            <span class="entry-date">Jan 2026 — Present</span>
-          </div>
-          <div class="entry-body">
-            <h3 class="entry-role">Open Source Contributor</h3>
-            <p class="entry-org">aden-hive · Agentic AI Infrastructure</p>
-            <ul class="entry-points">
-              <li>Multi-agent pipelines, LLM workflows, and tool-integrated reasoning systems.</li>
-              <li>3+ pull requests improving LLM execution, agent routing, and Docker deployment.</li>
-            </ul>
-          </div>
-        </li>
-
-        <li class="entry">
-          <div class="entry-when">
             <span class="entry-date">Jun 2025 — Nov 2025</span>
           </div>
           <div class="entry-body">
@@ -221,19 +257,23 @@
         </div>
         <div class="skill-group">
           <dt>Foundation</dt>
-          <dd>Python · PyTorch · TensorFlow · C++ · SQL</dd>
+          <dd>Python · PyTorch · TensorFlow · Scikit-Learn · C++ · SQL</dd>
         </div>
         <div class="skill-group">
           <dt>Vision</dt>
-          <dd>YOLO · ViT · Jetson · 3D Reconstruction · TensorRT</dd>
+          <dd>YOLO · ViT · OpenCV · 3D Reconstruction</dd>
+        </div>
+        <div class="skill-group">
+          <dt>Acceleration</dt>
+          <dd>NVIDIA DeepStream · TensorRT · Jetson · CUDA</dd>
         </div>
         <div class="skill-group">
           <dt>LLM / Agents</dt>
-          <dd>HuggingFace · LangChain · LangGraph · CrewAI · RAG · MCP · vLLM · Ollama · FAISS</dd>
+          <dd>HuggingFace · LangChain · LangGraph · CrewAI · RAG · MCP · Tool / Function Calling · vLLM · Ollama · FAISS · Chroma · Astra DB</dd>
         </div>
         <div class="skill-group">
           <dt>Infra / MLOps</dt>
-          <dd>Docker · FastAPI · MLflow · AWS</dd>
+          <dd>Docker · Kubernetes · FastAPI · MLflow · CI/CD · AWS · Azure · Supabase · Prometheus · Grafana · Guardrails</dd>
         </div>
       </dl>
     </div>
@@ -251,27 +291,42 @@
       <article class="flagship">
         <div class="flagship-head">
           <h3 class="flagship-title">Orchestraty</h3>
-          <span class="badge">Flagship · Private Beta</span>
+          <span class="badge">Platform · Private Beta</span>
         </div>
         <p class="flagship-sub">The AI Operating System for production-ready data.</p>
         <p class="flagship-desc">
-          Built by a team obsessed with one question: why is getting data
-          production-ready still so painful? Orchestraty brings structure,
-          intelligence, and automation to the entire data lifecycle — from raw
-          ingestion to production-ready output. No more stitching together
-          dozens of tools; one system orchestrates everything.
+          The umbrella platform bringing structure, intelligence, and automation
+          to the entire data lifecycle — from raw ingestion to production-ready
+          output. No more stitching together dozens of tools; one system
+          orchestrates everything. Know Your Code is its first open product.
         </p>
-        <ol class="pillars">
-          <li><span class="pillar-num">01</span> <strong>Ingest</strong> — multi-source intake, schema discovery, streaming connectors.</li>
-          <li><span class="pillar-num">02</span> <strong>Structure</strong> — schema-aware normalization, lineage tracking, auto-typing.</li>
-          <li><span class="pillar-num">03</span> <strong>Annotate</strong> — multi-LLM consensus labeling, routing, confidence scoring.</li>
-          <li><span class="pillar-num">04</span> <strong>Perceive</strong> — CLIP vision, semantic embeddings, cross-modal search.</li>
-          <li><span class="pillar-num">05</span> <strong>Ship</strong> — automated workflows, CI/CD for data, production-ready output.</li>
-        </ol>
-        <p class="flagship-foot">
-          <a href="https://www.orchestraty.com" target="_blank" rel="noopener">orchestraty.com&nbsp;↗</a>
-          <span class="dot">·</span> Launching 2026
-        </p>
+
+        <div class="flagship-product">
+          <p class="product-label">Featured product</p>
+          <div class="flagship-head">
+            <h4 class="product-title">Know Your Code</h4>
+            <span class="badge">Open Source · Beta</span>
+          </div>
+          <p class="flagship-sub">Understand any codebase — and how it changes over time.</p>
+          <p class="flagship-desc">
+            Built by a team obsessed with one question: why is understanding an
+            unfamiliar codebase still so painful? Know Your Code turns any
+            repository into a living map — architecture, dependencies, and intent
+            — and tracks how it shifts commit over commit. Onboard in minutes,
+            not months; works with any LLM, local or cloud.
+          </p>
+          <ol class="pillars">
+            <li><span class="pillar-num">01</span> <strong>Connect</strong> — clone any Git repo, multi-language parsing, incremental indexing.</li>
+            <li><span class="pillar-num">02</span> <strong>Map</strong> — dependency graph, architecture diagrams, hub &amp; entry-point detection.</li>
+            <li><span class="pillar-num">03</span> <strong>Understand</strong> — RAG-powered Q&amp;A, guided tours, complexity &amp; dead-code intel.</li>
+            <li><span class="pillar-num">04</span> <strong>Track</strong> — commit-over-commit structural diffs, drift &amp; architecture deltas.</li>
+            <li><span class="pillar-num">05</span> <strong>Share</strong> — committable knowledge graph, instant onboarding, LLM-ready export.</li>
+          </ol>
+          <p class="flagship-foot">
+            <a href="https://orchestraty.com/knowyourcode" target="_blank" rel="noopener">orchestraty.com/knowyourcode&nbsp;↗</a>
+            <span class="dot">·</span> Open source 2026
+          </p>
+        </div>
       </article>
 
       <!-- Supporting projects -->
@@ -323,7 +378,10 @@
           <ul class="tags tags-sm">
             <li>YOLOv6</li><li>SSD MobileNet</li><li>Jetson TX2</li><li>OpenCV</li><li>Arduino</li>
           </ul>
-          <p class="project-note">Edge perception · IEEE published</p>
+          <div class="project-foot">
+            <span class="project-note">Edge perception · IEEE published</span>
+            <a class="project-link" href="https://github.com/samratrajsharma/Smart_Glasses-navigation-Education-Project" target="_blank" rel="noopener">GitHub&nbsp;↗</a>
+          </div>
         </li>
 
         <li class="project">
@@ -340,7 +398,10 @@
           <ul class="tags tags-sm">
             <li>PyTorch</li><li>Whisper</li><li>LoRA / PEFT</li><li>HuggingFace</li>
           </ul>
-          <p class="project-note">WER down 19% · disfluency 85%</p>
+          <div class="project-foot">
+            <span class="project-note">WER down 19% · disfluency 85%</span>
+            <a class="project-link" href="https://github.com/samratrajsharma/OpenAI-Whisper-Fine-Tuned-ASR-using-LoRA-PEFT" target="_blank" rel="noopener">GitHub&nbsp;↗</a>
+          </div>
         </li>
 
         <li class="project">
@@ -357,7 +418,10 @@
           <ul class="tags tags-sm">
             <li>FastAPI</li><li>Ollama</li><li>OpenAI API</li><li>RAG</li><li>OCR</li>
           </ul>
-          <p class="project-note">Extraction 90–95% reliable</p>
+          <div class="project-foot">
+            <span class="project-note">Extraction 90–95% reliable</span>
+            <a class="project-link" href="https://github.com/samratrajsharma/AI-Financial-Operations-and-Risk-Intelligence-Platform" target="_blank" rel="noopener">GitHub&nbsp;↗</a>
+          </div>
         </li>
       </ol>
     </div>
@@ -431,6 +495,9 @@
   </div>
 </footer>
 
+<!-- Whole-page translation engine (driven by the custom language pill) -->
+<div id="google_translate_element" class="notranslate" aria-hidden="true"></div>
 <script src="script.js"></script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
