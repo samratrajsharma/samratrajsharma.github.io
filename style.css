@@ -400,17 +400,6 @@ html.translated-rtl body { top: 0 !important; }
   background: var(--bg-subtle);
 }
 
-.hero-oss { margin-top: 22px; }
-.hero-oss-label {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--fg-faint);
-  margin-bottom: 12px;
-}
-
 /* ============== SECTIONS ============== */
 
 .section {
@@ -493,26 +482,6 @@ html.translated-rtl body { top: 0 !important; }
 .tags-sm li {
   font-size: 11px;
   padding: 4px 10px;
-}
-
-.subblock { margin-top: 44px; }
-.subblock-title {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--fg-faint);
-  margin-bottom: 14px;
-}
-.plain-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.plain-list li {
-  font-size: 15px;
-  color: var(--fg-muted);
 }
 
 /* ============== EXPERIENCE ============== */
