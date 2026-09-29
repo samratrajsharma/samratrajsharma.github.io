@@ -17,6 +17,16 @@
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
+  /* Restriction notice */
+  --nda-fg: #b42318;
+  --nda-bg: #fef3f2;
+  --nda-line: #fda29b;
+
+  /* Portrait frame — same red family as the NDA badge so the two accents
+     read as one decision rather than two unrelated reds. */
+  --brick: #9c3b2c;
+  --brick-glow: rgba(156, 59, 44, 0.5);
+
   --maxw: 880px;
   --pad: clamp(20px, 5vw, 40px);
   --section-gap: clamp(56px, 9vw, 104px);
@@ -32,6 +42,13 @@
   --fg-faint: #909090;
   --line: #242424;
   --line-strong: #383838;
+
+  --nda-fg: #ff9d95;
+  --nda-bg: #2a1210;
+  --nda-line: #7a2820;
+
+  --brick: #b8513c;
+  --brick-glow: rgba(184, 81, 60, 0.45);
 }
 
 /* Dark — system preference, only until the user makes an explicit choice */
@@ -45,6 +62,13 @@
     --fg-faint: #909090;
     --line: #242424;
     --line-strong: #383838;
+
+    --nda-fg: #ff9d95;
+    --nda-bg: #2a1210;
+    --nda-line: #7a2820;
+
+    --brick: #b8513c;
+    --brick-glow: rgba(184, 81, 60, 0.45);
   }
 }
 
@@ -123,6 +147,46 @@ a { color: inherit; }
   text-decoration: none;
   white-space: nowrap;
 }
+
+/* Section jump links. Hidden below 900px, where the name plus the language
+   and theme controls already fill the bar. */
+.nav-links {
+  display: none;
+  list-style: none;
+  gap: 22px;
+  margin-inline: auto;
+}
+@media (min-width: 900px) {
+  .nav-links { display: flex; }
+}
+.nav-links a {
+  position: relative;
+  font-size: 13px;
+  color: var(--fg-faint);
+  text-decoration: none;
+  padding-block: 4px;
+  transition: color 0.16s ease;
+}
+.nav-links a:hover { color: var(--fg); }
+
+/* Underline grows from the centre; scaleX keeps it off the layout path so
+   nothing reflows as the active section changes on scroll. */
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--fg);
+  transform: scaleX(0);
+  transition: transform 0.22s cubic-bezier(0.22, 0.9, 0.25, 1);
+}
+.nav-links a.is-active {
+  color: var(--fg);
+  font-weight: 500;
+}
+.nav-links a.is-active::after { transform: scaleX(1); }
 .theme-toggle {
   display: inline-flex;
   align-items: center;
@@ -239,70 +303,6 @@ a { color: inherit; }
   color: var(--fg-faint);
 }
 
-/* First-visit hint with arrow pointing to the pill */
-.lang-hint {
-  position: absolute;
-  top: calc(100% + 26px);
-  right: 2px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 3px;
-  padding: 10px 13px;
-  background: var(--fg);
-  color: var(--bg);
-  border-radius: 12px;
-  white-space: nowrap;
-  box-shadow: 0 16px 44px -14px rgba(0, 0, 0, 0.5);
-  z-index: 130;
-  animation: langHintIn 0.35s ease both;
-}
-.lang-hint[hidden] { display: none; }
-.lang-hint-arrow {
-  position: absolute;
-  top: -24px;
-  right: 16px;
-  width: 20px;
-  height: 20px;
-  color: var(--fg);
-  animation: langArrowBounce 1.1s ease-in-out infinite;
-}
-.lang-hint-greet {
-  display: inline-block;
-  font-size: 15px;
-  font-weight: 600;
-  transition: opacity 0.18s ease;
-}
-.lang-hint-type {
-  display: inline-flex;
-  align-items: center;
-  min-height: 1.2em;
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  letter-spacing: 0.03em;
-  opacity: 0.9;
-}
-.lang-hint-caret {
-  display: inline-block;
-  width: 2px;
-  height: 1.05em;
-  margin-left: 2px;
-  background: currentColor;
-  animation: caretBlink 0.8s steps(1, end) infinite;
-}
-@keyframes langHintIn {
-  from { opacity: 0; transform: translateY(-6px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes langArrowBounce {
-  0%, 100% { transform: translateY(2px); opacity: 0.5; }
-  50% { transform: translateY(-4px); opacity: 1; }
-}
-@keyframes caretBlink {
-  0%, 50% { opacity: 1; }
-  50.01%, 100% { opacity: 0; }
-}
-
 /* Neutralize Google Translate's injected chrome */
 #google_translate_element {
   position: absolute !important;
@@ -323,19 +323,51 @@ body { top: 0 !important; position: static !important; }
 html.translated-ltr body,
 html.translated-rtl body { top: 0 !important; }
 
-@media (prefers-reduced-motion: reduce) {
-  .lang-hint,
-  .lang-hint-arrow,
-  .lang-hint-caret { animation: none !important; }
-  .lang-hint-caret { opacity: 1; }
-}
-
 /* ============== HERO ============== */
 
 .hero {
   padding-top: clamp(64px, 13vw, 132px);
   padding-bottom: clamp(40px, 7vw, 72px);
   border-bottom: 1px solid var(--line);
+}
+
+/* Two-column hero: text on the left, portrait on the right. `auto` on the
+   second track lets the portrait take exactly its own width, so the text
+   column absorbs every remaining pixel instead of a fixed split. Top-aligned
+   so the portrait's edge lines up with the eyebrow, not the name's baseline. */
+.hero .container {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(28px, 5vw, 60px);
+  align-items: start;
+}
+
+.hero-portrait {
+  width: clamp(148px, 23vw, 212px);
+}
+/* No aspect-ratio and no object-fit on purpose: `height: auto` lets the file
+   keep its own proportions, so nothing is ever cropped. The width/height
+   attributes on the <img> reserve the box before the file lands. */
+.hero-portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 4px solid var(--brick);
+  box-shadow: 0 8px 26px -12px var(--brick-glow);
+  background: var(--bg-subtle);
+}
+
+/* Single column below the two-up breakpoint, portrait above the name. */
+@media (max-width: 720px) {
+  .hero .container {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+  .hero-portrait {
+    order: -1;
+    width: clamp(132px, 36vw, 176px);
+  }
 }
 
 .eyebrow {
@@ -585,6 +617,87 @@ html.translated-rtl body { top: 0 !important; }
   color: var(--fg);
 }
 
+/* ---- Skill chips: oval capsules with a specular sweep on hover ---- */
+
+.chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  font-size: 13px;
+  line-height: 1.25;
+  letter-spacing: 0.005em;
+  color: var(--fg-muted);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  padding: 7px 15px;
+  white-space: nowrap;
+  cursor: default;
+  /* `translate` is animated instead of `transform` so the hover lift composes
+     with the entrance keyframes below rather than being overridden by them. */
+  transition:
+    color 0.22s ease,
+    background 0.22s ease,
+    border-color 0.22s ease,
+    translate 0.22s cubic-bezier(0.22, 0.9, 0.25, 1);
+}
+
+/* The sweep: a narrow diagonal highlight that crosses the capsule once. */
+.chip::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(105deg, transparent 32%, var(--fg) 50%, transparent 68%);
+  opacity: 0;
+  transform: translateX(-130%);
+  pointer-events: none;
+}
+
+.chip:hover {
+  color: var(--fg);
+  background: var(--bg-subtle);
+  border-color: var(--fg);
+  translate: 0 -2px;
+}
+.chip:hover::after {
+  animation: chip-sweep 0.72s ease-out;
+}
+
+@keyframes chip-sweep {
+  0%   { opacity: 0;    transform: translateX(-130%); }
+  30%  { opacity: 0.12; }
+  100% { opacity: 0;    transform: translateX(130%); }
+}
+
+/* Entrance: chips rise and fade in, staggered left-to-right, once their row
+   scrolls into view. `data-reveal` is set by JS, so with JS off or reduced
+   motion on, every chip renders visible with no animation at all. */
+.skills[data-reveal] .chip {
+  opacity: 0;
+}
+.skills[data-reveal] .skill-group.in .chip {
+  animation: chip-in 0.52s cubic-bezier(0.22, 0.9, 0.25, 1) both;
+}
+.skills[data-reveal] .skill-group.in .chip:nth-child(1) { animation-delay: 0ms; }
+.skills[data-reveal] .skill-group.in .chip:nth-child(2) { animation-delay: 55ms; }
+.skills[data-reveal] .skill-group.in .chip:nth-child(3) { animation-delay: 110ms; }
+.skills[data-reveal] .skill-group.in .chip:nth-child(4) { animation-delay: 165ms; }
+.skills[data-reveal] .skill-group.in .chip:nth-child(5) { animation-delay: 220ms; }
+.skills[data-reveal] .skill-group.in .chip:nth-child(6) { animation-delay: 275ms; }
+
+@keyframes chip-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 /* ============== WORK — FLAGSHIP ============== */
 
 .flagship {
@@ -592,24 +705,6 @@ html.translated-rtl body { top: 0 !important; }
   border-radius: 4px;
   padding: clamp(22px, 3.5vw, 36px);
   margin-bottom: 32px;
-}
-.flagship-product {
-  margin-top: 32px;
-  padding-top: 28px;
-  border-top: 1px solid var(--line-strong);
-}
-.product-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--fg-faint);
-  margin-bottom: 16px;
-}
-.product-title {
-  font-size: clamp(20px, 2.8vw, 26px);
-  font-weight: 600;
-  letter-spacing: -0.02em;
 }
 .flagship-head {
   display: flex;
@@ -633,6 +728,36 @@ html.translated-rtl body { top: 0 !important; }
   padding: 4px 10px;
   border-radius: 100px;
 }
+
+/* The only colour on the page — reserved for restriction notices. */
+.badge-nda {
+  color: var(--nda-fg);
+  background: var(--nda-bg);
+  border-color: var(--nda-line);
+  font-weight: 500;
+}
+/* Attribution badge. Filled rather than red, so the colour stays exclusive to
+   the restriction notice and does not have to compete with an org name. The
+   full org name cannot fit on one line in a half-width card, so this badge
+   wraps its text and keeps the capsule shape across however many lines. */
+.badge-org {
+  color: var(--fg-muted);
+  background: var(--bg-subtle);
+  border-color: var(--line-strong);
+  white-space: normal;
+  text-align: center;
+  line-height: 1.5;
+  letter-spacing: 0.05em;
+  padding: 5px 13px;
+}
+
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
 .flagship-sub {
   font-size: 17px;
   font-weight: 500;
@@ -646,32 +771,6 @@ html.translated-rtl body { top: 0 !important; }
   max-width: 64ch;
   margin-bottom: 24px;
 }
-
-.pillars {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  margin-bottom: 24px;
-}
-.pillars li {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  flex-wrap: wrap;
-  font-size: 15px;
-  line-height: 1.55;
-  color: var(--fg-muted);
-  padding: 12px 0;
-  border-top: 1px solid var(--line);
-}
-.pillars li:first-child { border-top: none; padding-top: 0; }
-.pillar-num {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--fg-faint);
-}
-.pillars strong { color: var(--fg); font-weight: 600; }
 
 .flagship-foot {
   font-family: var(--font-mono);
@@ -750,19 +849,29 @@ html.translated-rtl body { top: 0 !important; }
   padding-top: 0;
   border-top: none;
 }
+/* Project links read as buttons, not incidental text — a full border and
+   full-contrast label make the affordance obvious before hover. */
 .project-link {
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--fg-muted);
+  color: var(--fg);
   text-decoration: none;
   white-space: nowrap;
-  border-bottom: 1px solid var(--line-strong);
-  padding-bottom: 1px;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  border: 1px solid var(--line-strong);
+  border-radius: 100px;
+  padding: 5px 12px;
+  background: var(--bg-subtle);
+  transition: color 0.16s ease, border-color 0.16s ease, background 0.16s ease;
 }
-.project-link:hover { color: var(--fg); border-color: var(--fg); }
+.project-link:hover,
+.project-link:focus-visible {
+  color: var(--bg);
+  background: var(--fg);
+  border-color: var(--fg);
+}
+.project-foot { align-items: center; }
 
 /* Center a lone final card so the odd row doesn't look unbalanced */
 @media (min-width: 641px) {
@@ -775,42 +884,100 @@ html.translated-rtl body { top: 0 !important; }
 
 /* ============== PUBLICATIONS ============== */
 
+/* Publications render as link-preview cards: source line, title, what the
+   paper actually did, and the identifier — the same information a scraped
+   preview would surface, built from local data so it can never break. */
+
 .pubs {
   list-style: none;
   counter-reset: pub;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
-.pub { counter-increment: pub; border-top: 1px solid var(--line); }
-.pub:first-child { border-top: none; }
-.pub a {
-  display: grid;
-  grid-template-columns: 28px 1fr;
-  gap: 6px 14px;
-  align-items: baseline;
-  padding: 18px 0;
+.pub { counter-increment: pub; }
+
+.pub > a {
+  display: block;
+  padding: 18px 20px 16px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg);
   text-decoration: none;
   color: var(--fg);
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    translate 0.18s cubic-bezier(0.22, 0.9, 0.25, 1);
 }
-.pub a::before {
+.pub > a:hover,
+.pub > a:focus-visible {
+  border-color: var(--line-strong);
+  background: var(--bg-subtle);
+  translate: 0 -2px;
+}
+
+.pub-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+  margin-bottom: 10px;
+}
+.pub-head::before {
   content: counter(pub, decimal-leading-zero);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--fg-faint);
 }
+.pub-venue { color: var(--fg-muted); }
+.pub-date::before { content: '· '; }
+.pub-go {
+  margin-left: auto;
+  font-size: 14px;
+  color: var(--fg-muted);
+  transition: color 0.18s ease, translate 0.18s ease;
+}
+.pub > a:hover .pub-go,
+.pub > a:focus-visible .pub-go {
+  color: var(--fg);
+  translate: 2px -2px;
+}
+
+/* A persistent underline so the title reads as a link before hover. */
 .pub-title {
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 16.5px;
+  font-weight: 600;
   line-height: 1.45;
-  transition: color 0.15s ease;
-}
-.pub-meta {
-  grid-column: 2;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--fg-faint);
-}
-.pub a:hover .pub-title {
+  letter-spacing: -0.01em;
+  margin-bottom: 9px;
   text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--line-strong);
   text-underline-offset: 3px;
+  transition: text-decoration-color 0.18s ease;
+}
+.pub > a:hover .pub-title,
+.pub > a:focus-visible .pub-title {
+  text-decoration-color: var(--fg);
+}
+
+.pub-summary {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--fg-muted);
+  max-width: 62ch;
+  margin-bottom: 13px;
+}
+.pub-ident {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-faint);
+  padding-top: 11px;
+  border-top: 1px solid var(--line);
+  overflow-wrap: anywhere;
 }
 
 /* ============== CONTACT ============== */
@@ -897,6 +1064,9 @@ html.translated-rtl body { top: 0 !important; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   * { transition: none !important; }
+  /* Kill the chip sweep and entrance outright; chips stay put and visible. */
+  .chip { opacity: 1 !important; }
+  .chip, .chip::after { animation: none !important; }
 }
 
 /* ============== THEME TRANSITION ============== */

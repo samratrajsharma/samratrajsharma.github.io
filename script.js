@@ -68,6 +68,47 @@
 
 
 /* ========================================================================
+   SKILL CHIPS — staggered entrance as each skill row scrolls into view.
+
+   Progressive enhancement: the `data-reveal` attribute is what makes the CSS
+   hide the chips in the first place, and only this script sets it. With JS
+   disabled, or reduced motion requested, the attribute is never added and
+   every chip renders immediately in its final state.
+   ======================================================================== */
+
+(() => {
+  'use strict';
+
+  const skills = document.querySelector('.skills');
+  if (!skills) return;
+
+  const groups = Array.from(skills.querySelectorAll('.skill-group'));
+  if (!groups.length) return;
+
+  const prefersReduced =
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // No observer support or reduced motion → leave the chips plainly visible.
+  if (prefersReduced || !('IntersectionObserver' in window)) return;
+
+  skills.setAttribute('data-reveal', '');
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('in');
+        io.unobserve(entry.target); // fire once per row, never on scroll back up
+      });
+    },
+    { threshold: 0.25, rootMargin: '0px 0px -8% 0px' }
+  );
+
+  groups.forEach((g) => io.observe(g));
+})();
+
+
+/* ========================================================================
    LANGUAGE SWITCHER — a custom pill that drives Google's whole-page
    translation engine, with an animated menu and a first-visit hint.
    ======================================================================== */
@@ -148,7 +189,7 @@ window.googleTranslateElementInit = function () {
   };
 
   /* ---- menu open / close ---- */
-  const openMenu = () => { sw.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); dismissHint(); };
+  const openMenu = () => { sw.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); };
   const closeMenu = () => { sw.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); };
 
   btn.addEventListener('click', (e) => {
@@ -192,51 +233,55 @@ window.googleTranslateElementInit = function () {
     const iv = setInterval(() => { kill(); if (++n > 30) clearInterval(iv); }, 300);
   })();
 
-  /* ---- first-visit hint: cycling greetings + arrow to the pill ---- */
-  const hint = document.getElementById('lang-hint');
-  const greetEl = document.getElementById('lang-hint-greet');
-  const typeEl = document.getElementById('lang-hint-text');
-  const hintReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let greetTimer = null, hideTimer = null, dismissed = false;
+})();
 
-  function dismissHint() {
-    if (dismissed) return;
-    dismissed = true;
-    write('langHintSeen', '1');
-    clearInterval(greetTimer);
-    clearTimeout(hideTimer);
-    if (hint) hint.setAttribute('hidden', '');
-  }
 
-  if (hint && greetEl && read('langHintSeen', '') !== '1') {
-    const greetings = ['Hello', 'Hallo', 'Bonjour', 'Hola', 'नमस्ते', 'こんにちは', '你好', 'Olá'];
-    let i = 0;
-    const message = 'Please select your preferred language';
-    setTimeout(() => {
-      if (dismissed) return;
-      hint.removeAttribute('hidden');
-      greetEl.textContent = greetings[0];
-      greetTimer = setInterval(() => {
-        i = (i + 1) % greetings.length;
-        greetEl.style.opacity = '0';
-        setTimeout(() => { greetEl.textContent = greetings[i]; greetEl.style.opacity = '1'; }, 180);
-      }, 1400);
-      // Typewriter: write the instruction one character at a time.
-      if (typeEl) {
-        if (hintReduced) {
-          typeEl.textContent = message;
-        } else {
-          let t = 0;
-          const type = () => {
-            if (dismissed) return;
-            typeEl.textContent = message.slice(0, t);
-            if (t < message.length) { t += 1; setTimeout(type, 42); }
-          };
-          type();
-        }
-      }
-      hideTimer = setTimeout(dismissHint, 10000);
-    }, 1200);
-    window.addEventListener('scroll', dismissHint, { once: true, passive: true });
-  }
+/* ========================================================================
+   SECTION NAV — highlights whichever section is currently in view.
+
+   Uses a rootMargin that collapses the viewport to a band just under the
+   sticky header, so "active" means the section the reader is actually on
+   rather than any section merely touching the viewport. Sections are kept in
+   document order and the last intersecting one wins, which keeps the state
+   stable when a short section and a long one overlap in the band.
+   ======================================================================== */
+
+(() => {
+  'use strict';
+
+  const links = Array.from(document.querySelectorAll('.nav-links a'));
+  if (!links.length || !('IntersectionObserver' in window)) return;
+
+  const byId = new Map();
+  const sections = [];
+
+  links.forEach((link) => {
+    const el = document.querySelector(link.getAttribute('href'));
+    if (!el) return;
+    byId.set(el.id, link);
+    sections.push(el);
+  });
+  if (!sections.length) return;
+
+  const visible = new Set();
+
+  const paint = () => {
+    // Document order, so the topmost visible section is the active one.
+    const active = sections.find((s) => visible.has(s.id));
+    links.forEach((l) => l.classList.remove('is-active'));
+    if (active) byId.get(active.id).classList.add('is-active');
+  };
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) visible.add(e.target.id);
+        else visible.delete(e.target.id);
+      });
+      paint();
+    },
+    { rootMargin: '-72px 0px -65% 0px', threshold: 0 }
+  );
+
+  sections.forEach((s) => io.observe(s));
 })();
