@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="Research Scientist at Thoughtrons, working at the intersection of thermal imagery and machine vision — generative models, perception architectures, and embedded deployment." />
+<meta name="description" content="Research Scientist at Thoughtrons, building frontier AI that perceives, reasons, and acts — generative models, world models, and multimodal systems." />
 <meta name="color-scheme" content="light dark" />
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
 <meta name="theme-color" content="#0b0b0b" media="(prefers-color-scheme: dark)" />
-<title>Samrat Raj Sharma — Research Scientist · Thermal &amp; Machine Vision</title>
+<title>Samrat Raj Sharma — Research Scientist · Generative &amp; Multimodal AI</title>
 <link rel="canonical" href="https://samratrajsharma.github.io/" />
 
 <!-- Link previews. Absolute URLs are required: crawlers do not resolve
@@ -16,8 +16,8 @@
 <meta property="og:site_name" content="Samrat Raj Sharma" />
 <meta property="og:url" content="https://samratrajsharma.github.io/" />
 <meta property="og:title" content="Samrat Raj Sharma — Research Scientist" />
-<meta property="og:description" content="Working at the intersection of thermal imagery and machine vision — generative models, perception architectures, and embedded deployment." />
-<meta property="og:image" content="https://samratrajsharma.github.io/assets/og-card.jpg" />
+<meta property="og:description" content="Frontier AI that perceives, reasons, and acts — generative models, world models, and multimodal systems." />
+<meta property="og:image" content="https://samratrajsharma.github.io/assets/og-card.jpg?v=2" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="Samrat Raj Sharma — Research Scientist, Thoughtrons" />
@@ -26,8 +26,8 @@
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Samrat Raj Sharma — Research Scientist" />
-<meta name="twitter:description" content="Working at the intersection of thermal imagery and machine vision — generative models, perception architectures, and embedded deployment." />
-<meta name="twitter:image" content="https://samratrajsharma.github.io/assets/og-card.jpg" />
+<meta name="twitter:description" content="Frontier AI that perceives, reasons, and acts — generative models, world models, and multimodal systems." />
+<meta name="twitter:image" content="https://samratrajsharma.github.io/assets/og-card.jpg?v=2" />
 
 <!-- Structured data: lets search engines tie the name to the role, employer
      and profiles instead of reading the page as anonymous text. -->
@@ -45,12 +45,13 @@
   "email": "mailto:samratsharma979@gmail.com",
   "address": { "@type": "PostalAddress", "addressCountry": "IN" },
   "knowsAbout": [
-    "Computer Vision",
-    "Thermal and Infrared Imaging",
     "Generative Models",
-    "Multimodal Machine Learning",
+    "Diffusion Models",
+    "World Models",
+    "Multimodal AI",
     "Large Language Models",
-    "Embedded Inference"
+    "AI Agents",
+    "Computer Vision"
   ],
   "sameAs": [
     "https://github.com/samratrajsharma",
@@ -67,6 +68,14 @@
       var saved = localStorage.getItem('theme');
       var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
       document.documentElement.setAttribute('data-theme', theme);
+    } catch (e) {}
+    // Opening sequence: once per visit, never with reduced motion. The class
+    // hides the hero before first paint so nothing flashes before it plays.
+    try {
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
+          !sessionStorage.getItem('intro') && document.fonts) {
+        document.documentElement.classList.add('intro');
+      }
     } catch (e) {}
   })();
 </script>
@@ -143,7 +152,7 @@
   <header class="hero" id="top">
     <div class="container">
       <div class="hero-text">
-        <p class="eyebrow">Research Scientist — Vision &amp; LLMs</p>
+        <p class="eyebrow">Research Scientist — Generative &amp; Multimodal AI</p>
         <h1 class="hero-name notranslate" translate="no">Samrat Raj Sharma</h1>
         <p class="hero-tagline">
           Frontier AI that <em>perceives</em>, <em>reasons</em>, and
@@ -184,12 +193,16 @@
 
       <div class="prose">
         <p>
-          I'm a Research Scientist at <strong>Thoughtrons</strong>, where we build
-          and ship AI systems for defence and deep-tech — work that sits at the
-          intersection of <strong>thermal imagery</strong> and
-          <strong>machine vision</strong>. Across the wider stack I research
-          <strong>computer vision</strong>, <strong>multimodal and generative
-          models</strong>, and <strong>LLMs</strong>.
+          I'm a Research Scientist at <strong>Thoughtrons</strong>, working on
+          <strong>generative models</strong>, <strong>world models</strong>, and
+          <strong>multimodal systems</strong> that turn pixels and language into
+          decisions — physics-informed diffusion, Vision-Language-Action
+          architectures, and the synthetic data that trains them.
+        </p>
+        <p>
+          Alongside research I ship systems. The flagship is
+          <strong>Orchestraty</strong>, a coordination layer that lets AI coding
+          agents work in parallel without breaking each other's work.
         </p>
       </div>
     </div>
@@ -203,40 +216,45 @@
         <h2 class="section-title" id="experience-title">Experience</h2>
       </div>
 
+      <!-- Drawn by script.js from the data-from / data-to / data-label
+           attributes on each entry below, so the list stays the single source
+           of truth. Hidden until drawn. -->
+      <figure class="career-graph" aria-hidden="true"></figure>
+
       <ol class="timeline">
-        <li class="entry">
+        <li class="entry" data-from="2026-05" data-label="Thoughtrons" data-role="Research Scientist">
           <div class="entry-when">
-            <span class="entry-date">2026 — Present</span>
+            <span class="entry-date">May 2026 — Present</span>
             <span class="entry-now">Now</span>
           </div>
           <div class="entry-body">
             <h3 class="entry-role">Research Scientist</h3>
             <p class="entry-org">Thoughtrons</p>
             <ul class="entry-points">
-              <li><strong>Autonomous Thermal Perception</strong> — spearheading the replication of autonomous vision pipelines for physics-based LWIR/IR imaging, fusing radiometric ISP processing with optimized real-time detection for edge deployment.</li>
-              <li><strong>Modern Vision &amp; Foundation Models</strong> — scaling multimodal Vision Foundation Models and self-supervised visual encoders to deliver robust zero-shot and few-shot inference within clean, modular PyTorch workflows.</li>
-              <li><strong>System Architecture &amp; Data Engineering</strong> — leading the system design of a monolithic control-system platform while architecting high-throughput data pipelines for continuous ingestion, curation, and model evaluation.</li>
+              <li><strong>Generative world models</strong> — physics-informed diffusion and neural world models for high-fidelity scene understanding and generation.</li>
+              <li><strong>Vision-Language-Action</strong> — architectures and neural radiance fields for spatial reasoning.</li>
+              <li><strong>Synthetic data</strong> — multi-sensor pipelines that make models robust in complex real-world conditions.</li>
             </ul>
           </div>
         </li>
 
-        <li class="entry">
+        <li class="entry" data-from="2026-01" data-to="2026-04" data-label="ITGo Labs" data-role="Generative AI Engineer">
           <div class="entry-when">
-            <span class="entry-date">Feb 2026 — Present</span>
+            <span class="entry-date">Jan 2026 — Apr 2026</span>
           </div>
           <div class="entry-body">
-            <h3 class="entry-role">AI Engineer</h3>
+            <h3 class="entry-role">Generative AI Engineer</h3>
             <p class="entry-org">ITGo Labs · Mumbai</p>
             <ul class="entry-points">
-              <li>Computer vision systems for defense UAV / drone applications — real-time perception &amp; target detection.</li>
-              <li>YOLO and Vision Transformer optimization for resource-constrained edge hardware.</li>
+              <li>Large-scale data curation, synthetic-data generation and annotation pipelines for detection and perception models.</li>
+              <li>Visual perception workflows: object detection, representation learning, spatial scene analysis and multi-stage vision pipelines.</li>
             </ul>
           </div>
         </li>
 
-        <li class="entry">
+        <li class="entry" data-from="2025-06" data-to="2025-12" data-label="DRDO" data-role="R&amp;D Trainee">
           <div class="entry-when">
-            <span class="entry-date">Jun 2025 — Nov 2025</span>
+            <span class="entry-date">Jun 2025 — Dec 2025</span>
           </div>
           <div class="entry-body">
             <h3 class="entry-role">R&amp;D Trainee</h3>
@@ -248,7 +266,7 @@
           </div>
         </li>
 
-        <li class="entry">
+        <li class="entry" data-from="2024-09" data-to="2025-03" data-label="Dr. Sanjan TP Gupta" data-role="ML Research Intern">
           <div class="entry-when">
             <span class="entry-date">Sep 2024 — Mar 2025</span>
           </div>
@@ -262,7 +280,7 @@
           </div>
         </li>
 
-        <li class="entry">
+        <li class="entry" data-from="2024-02" data-to="2024-09" data-label="Teens in AI" data-role="Volunteer Data Scientist">
           <div class="entry-when">
             <span class="entry-date">Feb 2024 — Sep 2024</span>
           </div>
@@ -421,14 +439,77 @@
       <article class="flagship">
         <div class="flagship-head">
           <h3 class="flagship-title">Orchestraty</h3>
-          <span class="badge">Platform · Private Beta</span>
+          <span class="badge">Flagship</span>
         </div>
-        <p class="flagship-sub">The AI Operating System for production-ready data.</p>
+        <p class="flagship-sub">Your agents, aware of each other.</p>
+
+        <!-- Explainer: the whole loop in six steps, with real code. Two
+             agent sessions edit one repository; one changes a function the
+             other calls; Orchestraty tells the second agent before its next
+             edit; it adapts; both merge clean. script.js steps through it
+             (click a step to jump, hover to pause). -->
+        <figure class="explainer orch-x" data-ex="orch" aria-label="How Orchestraty works, in six steps">
+          <div class="ox-stage notranslate" translate="no">
+            <div class="ox-pane ox-a">
+              <div class="ox-head"><b>Agent A</b><span>worktree · refunds</span></div>
+              <div class="ox-file">shop/payments.py</div>
+              <pre class="ox-code"><span class="ln">7</span><span class="ox-line ox-sig">def charge(amount, <span class="ox-ins">*, </span>currency):</span>
+<span class="ln">8</span>    ...</pre>
+              <span class="ox-tag ox-tag-a">changed the contract</span>
+            </div>
+
+            <div class="ox-hub" aria-hidden="true">
+              <span class="ox-wire ox-wire-in"><i></i></span>
+              <span class="ox-core">orchestraty</span>
+              <span class="ox-wire ox-wire-out"><i></i></span>
+              <ul class="ox-facts">
+                <li>charge(): currency now keyword-only</li>
+                <li>called in checkout.py:11, session B</li>
+              </ul>
+            </div>
+
+            <div class="ox-pane ox-b">
+              <div class="ox-head"><b>Agent B</b><span>worktree · checkout</span></div>
+              <div class="ox-file">shop/checkout.py</div>
+              <p class="ox-note"><b>note</b> charge() changed in another session: currency can no longer be passed by position. Line 11 calls it; pass it by name.</p>
+              <pre class="ox-code"><span class="ln">9</span>def checkout(cart):
+<span class="ln">10</span>    total = cart.total()
+<span class="ln">11</span>    <span class="ox-line ox-call">return charge(total, <span class="ox-old">"INR"</span><span class="ox-new">currency="INR"</span>)</span></pre>
+              <span class="ox-tag ox-tag-b">adapted</span>
+            </div>
+          </div>
+
+          <div class="ox-merge notranslate" translate="no">
+            <span class="ox-merge-line"></span>
+            <span>main ← refunds + checkout</span>
+            <b>merged clean</b>
+          </div>
+
+          <ol class="ex-steps">
+            <li><button type="button">Two agents, one repo</button></li>
+            <li><button type="button">One changes a contract</button></li>
+            <li><button type="button">Orchestraty sees the effect</button></li>
+            <li><button type="button">It tells the right agent</button></li>
+            <li><button type="button">That agent adapts</button></li>
+            <li><button type="button">Both merge clean</button></li>
+          </ol>
+          <p class="ex-say" aria-live="polite">
+            <span data-say>Two coding agents work on one repository at once, each in its own worktree.</span>
+            <span data-say>Agent A makes <code>currency</code> keyword-only in <code>charge()</code>. Its own tests pass, so on its own branch nothing looks wrong: the break would only show up at merge.</span>
+            <span data-say>Orchestraty sees the edit, works out what it affects, and finds that <code>checkout.py</code>, in Agent B's session, still calls <code>charge()</code> the old way.</span>
+            <span data-say>Before Agent B's next edit of that file, Orchestraty hands it a short note built from facts in git and the code. No model, no guessing, nothing leaves the machine.</span>
+            <span data-say>Agent B passes <code>currency</code> by name, which works with both versions of <code>charge()</code>.</span>
+            <span data-say>Both branches merge cleanly. The break never happened, and you were not interrupted.</span>
+          </p>
+        </figure>
+
         <p class="flagship-desc">
-          The umbrella platform bringing structure, intelligence, and automation
-          to the entire data lifecycle — from raw ingestion to production-ready
-          output. No more stitching together dozens of tools; one system
-          orchestrates everything.
+          When several coding agents work on one repository, one can change
+          something another relies on — a function's arguments, a route — and
+          the break only shows up at merge. Orchestraty watches what each
+          session changes and tells the affected agent, in a short note,
+          before it builds on the old form. Notes are filled in from git and
+          the code, never from a model, and nothing leaves your machine.
         </p>
         <p class="flagship-foot">
           <a href="https://orchestraty.com" target="_blank" rel="noopener">orchestraty.com&nbsp;↗</a>
@@ -446,27 +527,17 @@
             <span class="badge badge-nda">NDA Signed</span>
             <span class="badge badge-org">Defence Research and Development Organisation · Govt. of India</span>
           </p>
-          <h3 class="project-title">Non-Line-of-Sight Imaging</h3>
-          <p class="project-desc">
-            Reconstructs scenes hidden behind obstacles — indirect light
-            reflections, temporal signals, and physics-aware deep learning to
-            recover geometry and motion outside the camera's field of view.
-          </p>
-          <ul class="tags tags-sm">
-            <li>Computer Vision</li><li>Computational Optics</li><li>Deep Learning</li><li>NLoS</li>
-          </ul>
-          <p class="project-note">Physics-aware perception</p>
-        </li>
 
-        <li class="project">
-          <div class="project-top">
-            <span class="project-num">002</span>
-            <span class="project-year">2025 · DRDO</span>
-          </div>
-          <p class="badge-row">
-            <span class="badge badge-nda">NDA Signed</span>
-            <span class="badge badge-org">Defence Research and Development Organisation · Govt. of India</span>
-          </p>
+          <!-- Live drawing: 5% of the surface is sampled, then the full scene
+               is reconstructed through those samples. Drawn by script.js. -->
+          <figure class="viz viz-spc" aria-hidden="true">
+            <canvas></canvas>
+            <figcaption class="viz-caption notranslate" translate="no">
+              <span>sampled <b data-v="pct">0.0%</b></span>
+              <span class="viz-then">→ full 3D scene</span>
+            </figcaption>
+          </figure>
+
           <h3 class="project-title">Single-Pixel Camera</h3>
           <p class="project-desc">
             Reconstructs full scenes from a single photodetector via
@@ -481,26 +552,211 @@
 
         <li class="project">
           <div class="project-top">
+            <span class="project-num">002</span>
+            <span class="project-year">2025 · DRDO</span>
+          </div>
+          <p class="badge-row">
+            <span class="badge badge-nda">NDA Signed</span>
+            <span class="badge badge-org">Defence Research and Development Organisation · Govt. of India</span>
+          </p>
+
+          <!-- Live drawing: laser pulses bounce off a visible wall, reach the
+               scene hidden behind the corner, and return; each pulse adds to
+               the reconstruction. Drawn by script.js. -->
+          <figure class="viz viz-nlos" aria-hidden="true">
+            <canvas></canvas>
+            <figcaption class="viz-caption notranslate" translate="no">
+              <span>pulses <b data-v="pulses">0</b></span>
+              <span class="viz-then">→ hidden scene recovered</span>
+            </figcaption>
+          </figure>
+
+          <h3 class="project-title">Non-Line-of-Sight Imaging</h3>
+          <p class="project-desc">
+            Reconstructs scenes hidden behind obstacles — indirect light
+            reflections, temporal signals, and physics-aware deep learning to
+            recover geometry and motion outside the camera's field of view.
+          </p>
+          <ul class="tags tags-sm">
+            <li>Computer Vision</li><li>Computational Optics</li><li>Deep Learning</li><li>NLoS</li>
+          </ul>
+          <p class="project-note">Physics-aware perception</p>
+        </li>
+
+        <li class="project project-wide">
+          <div class="project-top">
             <span class="project-num">003</span>
             <span class="project-year">2022–2025 · IEEE</span>
           </div>
-          <h3 class="project-title">Smart Glasses for the Blind</h3>
-          <p class="project-desc">
-            Real-time obstacle detection, currency recognition, SOS, and an
-            on-device AI assistant on NVIDIA Jetson — published in IEEE Xplore.
-          </p>
-          <ul class="tags tags-sm">
-            <li>YOLOv6</li><li>SSD MobileNet</li><li>Jetson TX2</li><li>OpenCV</li><li>Arduino</li>
-          </ul>
-          <div class="project-foot">
-            <span class="project-note">Edge perception · IEEE published</span>
-            <a class="project-link" href="https://github.com/samratrajsharma/Smart_Glasses-navigation-Education-Project" target="_blank" rel="noopener">GitHub&nbsp;↗</a>
+
+          <!-- Explainer: the hardware, redrawn from the project's own diagram
+               and brought to life in four steps (sense, process, speak, SOS).
+               Hover any part or label for what it does. script.js runs it. -->
+          <figure class="explainer glasses-x" data-ex="glasses" aria-label="How the smart glasses work, in four steps">
+            <svg class="gx" viewBox="0 0 1080 500" aria-hidden="true" focusable="false">
+              <path class="gx-far" d="M66 152 L132 112 L330 92 L560 112 Q592 116 590 142"/>
+              <g data-part="speakers"><circle class="gx-spk" cx="432" cy="99" r="8"/></g>
+              <path class="gx-glass" d="M70 150 L250 160 Q262 161 260 174 L246 262 Q238 296 202 294 L112 288 Q76 285 70 252 L60 166 Q58 150 70 150 Z"/>
+              <path class="gx-glass" d="M300 165 L470 176 Q482 177 480 190 L468 272 Q461 304 427 302 L342 297 Q308 294 302 264 L292 180 Q290 165 300 165 Z"/>
+              <path class="gx-frame" d="M70 150 L250 160 Q262 161 260 174 L246 262 Q238 296 202 294 L112 288 Q76 285 70 252 L60 166 Q58 150 70 150 Z"/>
+              <path class="gx-frame" d="M300 165 L470 176 Q482 177 480 190 L468 272 Q461 304 427 302 L342 297 Q308 294 302 264 L292 180 Q290 165 300 165 Z"/>
+              <path class="gx-frame" d="M260 178 Q276 160 292 182"/>
+              <path class="gx-frame" d="M482 186 L540 178 L700 198 Q728 202 724 228 Q720 248 706 246"/>
+              <g data-part="speakers"><circle class="gx-spk" cx="568" cy="182" r="10"/></g>
+              <g data-part="ultrasonic">
+                <rect class="gx-unit" x="232" y="116" width="88" height="34" rx="4"/>
+                <circle class="gx-soft" cx="256" cy="133" r="11"/><circle class="gx-dot" cx="256" cy="133" r="4"/>
+                <circle class="gx-soft" cx="296" cy="133" r="11"/><circle class="gx-dot" cx="296" cy="133" r="4"/>
+              </g>
+              <g data-part="cameras">
+                <circle class="gx-ring" cx="160" cy="222" r="13"/><circle class="gx-dot" cx="160" cy="222" r="5"/>
+                <circle class="gx-ring" cx="386" cy="236" r="13"/><circle class="gx-dot" cx="386" cy="236" r="5"/>
+              </g>
+              <g data-part="cable">
+                <path class="gx-cable" d="M708 246 C 702 330, 606 372, 664 414 C 724 456, 804 376, 812 282"/>
+                <path class="gx-weave" d="M708 246 C 702 330, 606 372, 664 414 C 724 456, 804 376, 812 282"/>
+              </g>
+
+              <g data-part="box"><rect class="gx-box" x="750" y="280" width="230" height="190" rx="4"/></g>
+              <g data-part="typec">
+                <path class="gx-cell" d="M812 280 V330 M750 330 H874"/>
+                <rect class="gx-slot" x="766" y="298" width="30" height="10" rx="5"/>
+                <text class="gx-cap" x="781" y="322">USB-C</text>
+              </g>
+              <g data-part="sd">
+                <path class="gx-cell" d="M874 280 V372"/>
+                <rect class="gx-slot" x="828" y="299" width="30" height="8" rx="1"/>
+                <text class="gx-cap" x="843" y="322">SD</text>
+              </g>
+              <g data-part="jetson">
+                <rect class="gx-unit" x="882" y="288" width="90" height="78" rx="3"/>
+                <g class="gx-fins"><line x1="900" y1="300" x2="900" y2="354"/><line x1="907" y1="300" x2="907" y2="354"/><line x1="914" y1="300" x2="914" y2="354"/><line x1="921" y1="300" x2="921" y2="354"/><line x1="928" y1="300" x2="928" y2="354"/><line x1="935" y1="300" x2="935" y2="354"/><line x1="942" y1="300" x2="942" y2="354"/><line x1="949" y1="300" x2="949" y2="354"/><line x1="956" y1="300" x2="956" y2="354"/></g>
+                <circle class="gx-fanbg" cx="927" cy="327" r="20"/>
+                <g class="gx-fan">
+                  <path d="M927 327 Q933 313 927 309 Q919 314 927 327 Z"/>
+                  <path d="M927 327 Q933 313 927 309 Q919 314 927 327 Z" transform="rotate(120 927 327)"/>
+                  <path d="M927 327 Q933 313 927 309 Q919 314 927 327 Z" transform="rotate(240 927 327)"/>
+                </g>
+                <circle class="gx-dot" cx="927" cy="327" r="3"/>
+              </g>
+              <g data-part="gps">
+                <rect class="gx-unit" x="758" y="338" width="108" height="26" rx="2"/>
+                <rect class="gx-soft" x="796" y="342" width="24" height="18" rx="1"/>
+                <circle class="gx-soft" cx="846" cy="351" r="6"/>
+              </g>
+              <g data-part="battery">
+                <path class="gx-cell" d="M750 372 H980"/>
+                <rect class="gx-batt" x="758" y="380" width="214" height="82" rx="3"/>
+                <text class="gx-cap gx-batt-t" x="865" y="416">Lithium-ion battery</text>
+                <text class="gx-cap" x="865" y="436">3.7 V · 4950 mAh</text>
+              </g>
+              <g data-part="led"><rect class="gx-accent" x="762" y="271" width="14" height="9" rx="1"/></g>
+              <g data-part="buttons">
+                <rect class="gx-btn" x="900" y="272" width="16" height="8" rx="1"/>
+                <rect class="gx-btn" x="936" y="272" width="16" height="8" rx="1"/>
+              </g>
+              <g data-part="sos"><rect class="gx-accent" x="980" y="312" width="9" height="36" rx="1"/></g>
+
+              <g class="gx-fx"></g>
+
+              <g class="gx-labels">
+                <g class="gx-l" data-part="ultrasonic"><path class="gx-lead" d="M150 56 L262 120"/><text x="150" y="48" text-anchor="middle">Ultrasonic sensor</text></g>
+                <g class="gx-l" data-part="speakers"><path class="gx-lead" d="M500 48 L436 94 M500 48 L566 174"/><text x="500" y="40" text-anchor="middle">Speakers</text></g>
+                <g class="gx-l" data-part="cameras"><path class="gx-lead" d="M110 356 L158 236 M110 356 L382 250"/><text x="110" y="372" text-anchor="middle">Cameras</text></g>
+                <g class="gx-l" data-part="cable"><path class="gx-lead" d="M598 330 L640 370"/><text x="598" y="322" text-anchor="middle">Woven cable</text></g>
+                <g class="gx-l" data-part="led"><path class="gx-lead" d="M770 246 L769 268"/><text x="770" y="238" text-anchor="middle">LED</text></g>
+                <g class="gx-l" data-part="buttons"><path class="gx-lead" d="M926 250 L908 270 M926 250 L944 270"/><text x="926" y="242" text-anchor="middle">Mode buttons</text></g>
+                <g class="gx-l" data-part="jetson"><path class="gx-lead" d="M996 296 L972 304"/><text x="1000" y="300">Jetson TX2</text></g>
+                <g class="gx-l" data-part="sos"><path class="gx-lead" d="M996 332 L990 332"/><text x="1000" y="336">SOS</text></g>
+                <g class="gx-l" data-part="gps"><path class="gx-lead" d="M740 351 L756 351"/><text x="736" y="355" text-anchor="end">GPS</text></g>
+                <g class="gx-l" data-part="box"><path class="gx-lead" d="M865 474 L865 482"/><text x="865" y="496" text-anchor="middle">Processing box</text></g>
+              </g>
+
+              <g class="gx-out">
+                <text class="gx-o" x="40" y="428"></text>
+                <text class="gx-o" x="40" y="452"></text>
+                <text class="gx-o" x="40" y="476"></text>
+              </g>
+            </svg>
+
+            <ol class="ex-steps" style="--n: 4">
+              <li><button type="button">Sense</button></li>
+              <li><button type="button">Process on-device</button></li>
+              <li><button type="button">Speak</button></li>
+              <li><button type="button">SOS</button></li>
+            </ol>
+            <p class="ex-say" aria-live="polite">
+              <span data-say>A camera in each lens watches the way ahead, and the ultrasonic pair on the bridge times echoes to measure how far away things are.</span>
+              <span data-say>Frames travel down the woven cable to an NVIDIA Jetson TX2 in the processing box, which runs the detection models on the device itself, with no cloud.</span>
+              <span data-say>The result comes back up the cable and is spoken through the speakers in the temples: what it is, how far, and which side.</span>
+              <span data-say>One press of SOS on the box: the GPS fix and recent calls go to an emergency contact by email.</span>
+              <span class="ex-part" data-part-say></span>
+            </p>
+          </figure>
+
+          <div class="project-main">
+            <h3 class="project-title">Smart Glasses for the Visually Impaired</h3>
+            <p class="project-desc">
+              Glasses that see for their wearer and say what matters: objects
+              and obstacles with their distance, text read aloud, currency
+              notes with a genuine-or-fake check, an SOS alert with location,
+              and a voice assistant. Everything runs on an NVIDIA Jetson TX2
+              in a pocket-sized box; published in IEEE Xplore.
+            </p>
+            <ul class="tags tags-sm">
+              <li>SSD MobileNet</li><li>YOLOv6</li><li>Jetson TX2</li><li>OpenCV</li><li>Ultrasonic sensing</li><li>Text-to-speech</li>
+            </ul>
+            <div class="project-foot">
+              <span class="project-note">Edge perception · IEEE published</span>
+              <a class="project-link" href="https://github.com/samratrajsharma/Smart_Glasses-navigation-Education-Project" target="_blank" rel="noopener">GitHub&nbsp;↗</a>
+            </div>
           </div>
         </li>
 
         <li class="project">
           <div class="project-top">
             <span class="project-num">004</span>
+            <span class="project-year">2026</span>
+          </div>
+          <h3 class="project-title">GrowthMesh AI</h3>
+          <p class="project-desc">
+            A multi-agent system that runs social-media growth end to end:
+            profile and competitor agents find what works, a planner builds the
+            calendar, and copy, hashtag and visual-prompt agents write the
+            posts. A human reviews before anything goes out.
+          </p>
+          <ul class="tags tags-sm">
+            <li>LangGraph</li><li>RAG</li><li>FastAPI</li><li>Streamlit</li>
+          </ul>
+          <div class="project-foot">
+            <span class="project-note">Multi-agent · human in the loop</span>
+            <a class="project-link" href="https://github.com/samratrajsharma/GrowthMesh-AI" target="_blank" rel="noopener">GitHub&nbsp;↗</a>
+          </div>
+        </li>
+
+        <li class="project">
+          <div class="project-top">
+            <span class="project-num">005</span>
+            <span class="project-year">2026</span>
+          </div>
+          <h3 class="project-title">EchoMind · Real-time Voice Agent</h3>
+          <p class="project-desc">
+            A voice assistant over your documents. Hybrid retrieval, vector
+            embeddings and streaming LLM responses turn uploaded files into a
+            knowledge base you can question out loud.
+          </p>
+          <ul class="tags tags-sm">
+            <li>Hybrid RAG</li><li>Vector search</li><li>Streaming LLMs</li><li>Speech</li>
+          </ul>
+          <div class="project-foot">
+            <span class="project-note">Voice in · grounded answers out</span>
+            <a class="project-link" href="https://github.com/samratrajsharma/EchoMind---Real-time-voice-AI-agent-with-RAG" target="_blank" rel="noopener">GitHub&nbsp;↗</a>
+          </div>
+        </li>
+
+        <li class="project">
+          <div class="project-top">
+            <span class="project-num">006</span>
             <span class="project-year">2024</span>
           </div>
           <h3 class="project-title">Whisper · LoRA · Hindi ASR</h3>
@@ -520,7 +776,7 @@
 
         <li class="project">
           <div class="project-top">
-            <span class="project-num">005</span>
+            <span class="project-num">007</span>
             <span class="project-year">2025</span>
           </div>
           <h3 class="project-title">AI FinOps &amp; Risk Intelligence</h3>
@@ -549,69 +805,97 @@
         <h2 class="section-title" id="publications-title">Publications</h2>
       </div>
 
+      <!-- Each paper explains itself: a figure that shows the idea, then the
+           problem, the approach and the outcome in a line each. The figures
+           are drawn by script.js, play once when seen, and replay on hover. -->
       <ol class="pubs">
         <li class="pub">
           <a href="https://dx.doi.org/10.2139/ssrn.5222180" target="_blank" rel="noopener">
-            <div class="pub-head">
-              <span class="pub-venue">ICAIN · SSRN</span>
-              <span class="pub-date">Apr 2025</span>
-              <span class="pub-go" aria-hidden="true">↗</span>
+            <figure class="pub-fig" data-fig="gnn" aria-hidden="true">
+              <canvas></canvas>
+              <figcaption class="notranslate" translate="no">molecule → graph → why it is toxic</figcaption>
+            </figure>
+            <div class="pub-body">
+              <div class="pub-head">
+                <span class="pub-venue">ICAIN · SSRN</span>
+                <span class="pub-date">Apr 2025</span>
+                <span class="pub-go" aria-hidden="true">↗</span>
+              </div>
+              <h3 class="pub-title">Decoding Toxicity: Unveiling Hidden Molecular Patterns with Graph Neural Networks</h3>
+              <dl class="pub-ctx">
+                <div><dt>Problem</dt><dd>Testing every new chemical for toxicity in a lab is slow and expensive.</dd></div>
+                <div><dt>Approach</dt><dd>Treat each molecule as a graph of atoms and bonds, and train graph convolutional networks to predict toxicity from its structure.</dd></div>
+                <div><dt>Outcome</dt><dd>Predictions that point to the substructures behind them, so a chemist can see why a molecule is flagged.</dd></div>
+              </dl>
+              <span class="pub-ident">doi&nbsp;10.2139/ssrn.5222180</span>
             </div>
-            <h3 class="pub-title">Decoding Toxicity: Unveiling Hidden Molecular Patterns with Graph Neural Networks</h3>
-            <p class="pub-summary">
-              Graph convolutional networks over molecular graphs to predict
-              chemical toxicity, with attention to which substructures drive
-              each prediction.
-            </p>
-            <span class="pub-ident">doi&nbsp;10.2139/ssrn.5222180</span>
           </a>
         </li>
         <li class="pub">
           <a href="https://ieeexplore.ieee.org/document/10303495" target="_blank" rel="noopener">
-            <div class="pub-head">
-              <span class="pub-venue">IEEE Xplore</span>
-              <span class="pub-date">Nov 2023</span>
-              <span class="pub-go" aria-hidden="true">↗</span>
+            <figure class="pub-fig" data-fig="obstacle" aria-hidden="true">
+              <canvas></canvas>
+              <figcaption class="notranslate" translate="no">see → measure → say it out loud</figcaption>
+            </figure>
+            <div class="pub-body">
+              <div class="pub-head">
+                <span class="pub-venue">IEEE Xplore</span>
+                <span class="pub-date">Nov 2023</span>
+                <span class="pub-go" aria-hidden="true">↗</span>
+              </div>
+              <h3 class="pub-title">Smart Glasses for Blind People Using Obstacle Detection</h3>
+              <dl class="pub-ctx">
+                <div><dt>Problem</dt><dd>A white cane only finds what it touches, and says nothing about what an obstacle is.</dd></div>
+                <div><dt>Approach</dt><dd>Glasses with cameras and ultrasonic sensing run obstacle detection on an NVIDIA Jetson and say what is ahead.</dd></div>
+                <div><dt>Outcome</dt><dd>Real-time obstacle alerts, currency recognition and an on-device assistant in one wearable.</dd></div>
+              </dl>
+              <span class="pub-ident">ieeexplore.ieee.org/document/10303495</span>
             </div>
-            <h3 class="pub-title">Smart Glasses for Blind People Using Obstacle Detection</h3>
-            <p class="pub-summary">
-              A wearable assistive system running real-time obstacle detection,
-              currency recognition, and an on-device assistant on NVIDIA Jetson
-              hardware.
-            </p>
-            <span class="pub-ident">ieeexplore.ieee.org/document/10303495</span>
           </a>
         </li>
         <li class="pub">
           <a href="https://dx.doi.org/10.2139/ssrn.5221231" target="_blank" rel="noopener">
-            <div class="pub-head">
-              <span class="pub-venue">COMSIA</span>
-              <span class="pub-date">2025</span>
-              <span class="pub-go" aria-hidden="true">↗</span>
+            <figure class="pub-fig" data-fig="path" aria-hidden="true">
+              <canvas></canvas>
+              <figcaption class="notranslate" translate="no">search → safe route → within the chip's budget</figcaption>
+            </figure>
+            <div class="pub-body">
+              <div class="pub-head">
+                <span class="pub-venue">COMSIA</span>
+                <span class="pub-date">2025</span>
+                <span class="pub-go" aria-hidden="true">↗</span>
+              </div>
+              <h3 class="pub-title">Advanced Path-Planning Algorithms on NVIDIA Jetson TX2 for Assistive Technologies</h3>
+              <dl class="pub-ctx">
+                <div><dt>Problem</dt><dd>A wearable has to plan safe routes using only the compute it carries.</dd></div>
+                <div><dt>Approach</dt><dd>Path-planning algorithms implemented and measured on an NVIDIA Jetson TX2.</dd></div>
+                <div><dt>Outcome</dt><dd>Route quality weighed against compute time, to choose what can run in real time on the device.</dd></div>
+              </dl>
+              <span class="pub-ident">doi&nbsp;10.2139/ssrn.5221231</span>
             </div>
-            <h3 class="pub-title">Advanced Path-Planning Algorithms on NVIDIA Jetson TX2 for Assistive Technologies</h3>
-            <p class="pub-summary">
-              Path-planning algorithms evaluated on embedded Jetson TX2 hardware,
-              weighing route quality against the compute available on a wearable
-              device.
-            </p>
-            <span class="pub-ident">doi&nbsp;10.2139/ssrn.5221231</span>
           </a>
         </li>
         <li class="pub">
           <a href="https://tinyurl.com/securingsmartglasses" target="_blank" rel="noopener">
-            <div class="pub-head">
-              <span class="pub-venue">ICRTICC</span>
-              <span class="pub-date">2025</span>
-              <span class="pub-go" aria-hidden="true">↗</span>
+            <figure class="pub-fig" data-fig="secure" aria-hidden="true">
+              <canvas></canvas>
+              <figcaption class="notranslate" translate="no">personal data → threat at each hop → a mitigation for each</figcaption>
+            </figure>
+            <div class="pub-body">
+              <div class="pub-head">
+                <span class="pub-venue">ICRTICC</span>
+                <span class="pub-date">2025</span>
+                <span class="pub-award">Best Research Paper</span>
+                <span class="pub-go" aria-hidden="true">↗</span>
+              </div>
+              <h3 class="pub-title">Securing Assistive Smart Glasses: A Framework for Mitigating Cybersecurity Threats</h3>
+              <dl class="pub-ctx">
+                <div><dt>Problem</dt><dd>Assistive glasses constantly capture camera, audio and location data about the person wearing them.</dd></div>
+                <div><dt>Approach</dt><dd>A threat model across the device, its connections and the cloud, with a mitigation for each threat.</dd></div>
+                <div><dt>Outcome</dt><dd>A security framework for assistive wearables, awarded Best Research Paper at ICRTICC.</dd></div>
+              </dl>
+              <span class="pub-ident">Conference paper</span>
             </div>
-            <h3 class="pub-title">Securing Assistive Smart Glasses: A Framework for Mitigating Cybersecurity Threats</h3>
-            <p class="pub-summary">
-              A threat model and mitigation framework for assistive smart-glass
-              platforms, which continuously handle camera, audio, and location
-              data about their wearer.
-            </p>
-            <span class="pub-ident">Conference paper</span>
           </a>
         </li>
       </ol>
@@ -627,8 +911,8 @@
       </div>
 
       <p class="contact-lead">
-        Open to research collaborations in deep-tech and defense — and to a good
-        conversation about world models, perception, and agents.
+        Open to research collaborations and conversations on world models,
+        agents, and multimodal AI:
       </p>
 
       <a class="contact-email" href="mailto:samratsharma979@gmail.com">samratsharma979@gmail.com</a>

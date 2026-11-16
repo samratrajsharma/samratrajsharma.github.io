@@ -30,6 +30,12 @@
   --maxw: 880px;
   --pad: clamp(20px, 5vw, 40px);
   --section-gap: clamp(56px, 9vw, 104px);
+
+  /* One motion language for the whole page. --ease-out settles things into
+     place (entrances, chips); --ease-std moves things across (the theme
+     reveal, playheads, wipes). script.js mirrors both curves. */
+  --ease-out: cubic-bezier(0.22, 0.9, 0.25, 1);
+  --ease-std: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Dark — explicit toggle */
@@ -326,6 +332,7 @@ html.translated-rtl body { top: 0 !important; }
 /* ============== HERO ============== */
 
 .hero {
+  position: relative;
   padding-top: clamp(64px, 13vw, 132px);
   padding-bottom: clamp(40px, 7vw, 72px);
   border-bottom: 1px solid var(--line);
@@ -397,8 +404,86 @@ html.translated-rtl body { top: 0 !important; }
   margin-bottom: 36px;
 }
 .hero-tagline em {
+  position: relative;
   font-style: normal;
   font-weight: 600;
+}
+
+/* ---- Opening sequence ----------------------------------------------------
+   Once per visit. The <head> script adds .intro before first paint, which
+   hides the hero. script.js then adds .intro-js (taking ownership), samples
+   the name into points and resolves them from noise like a diffusion model
+   denoising, while .intro-play staggers the rest of the hero in. If the
+   script never runs, the failsafe below shows everything after 3s. */
+
+.intro .eyebrow,
+.intro .hero-name,
+.intro .hero-tagline,
+.intro .hero-meta,
+.intro .hero-links,
+.intro .hero-portrait { opacity: 0; }
+
+.intro:not(.intro-js) :is(.eyebrow, .hero-name, .hero-tagline, .hero-meta, .hero-links, .hero-portrait) {
+  animation: intro-failsafe 0.01s linear 3s forwards;
+}
+@keyframes intro-failsafe { to { opacity: 1; } }
+
+.intro-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.intro-play .eyebrow      { animation: rise 0.7s var(--ease-out) 0.05s both; }
+.intro-play .hero-tagline { animation: rise 0.7s var(--ease-out) 0.78s both; }
+.intro-play .hero-meta    { animation: rise 0.7s var(--ease-out) 1.5s both; }
+.intro-play .hero-links   { animation: rise 0.7s var(--ease-out) 1.6s both; }
+.intro-play .hero-portrait { animation: portrait-in 1.15s var(--ease-std) 0.25s both; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+/* The portrait develops top to bottom. Negative insets keep the frame's glow
+   outside the clip, so the shadow is never cut off. */
+@keyframes portrait-in {
+  from { opacity: 0; clip-path: inset(-40px -40px 100% -40px); }
+  30%  { opacity: 1; }
+  to   { opacity: 1; clip-path: inset(-40px -40px -40px -40px); }
+}
+
+/* Perceives → reasons → acts: attention passes over each verb in turn. A
+   hairline sweeps across it and the verb inks from faint to full. */
+.intro-play .hero-tagline em { animation: verb-ink 0.5s var(--ease-out) both; }
+.intro-play .hero-tagline em::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1.5px;
+  background: currentColor;
+  transform: scaleX(0);
+  animation: verb-pass 0.75s var(--ease-std) both;
+}
+.intro-play .hero-tagline em:nth-of-type(1),
+.intro-play .hero-tagline em:nth-of-type(1)::after { animation-delay: 1.02s; }
+.intro-play .hero-tagline em:nth-of-type(2),
+.intro-play .hero-tagline em:nth-of-type(2)::after { animation-delay: 1.24s; }
+.intro-play .hero-tagline em:nth-of-type(3),
+.intro-play .hero-tagline em:nth-of-type(3)::after { animation-delay: 1.46s; }
+
+@keyframes verb-ink {
+  from { color: var(--fg-faint); }
+  to   { color: var(--fg); }
+}
+@keyframes verb-pass {
+  0%     { transform: scaleX(0); transform-origin: left; }
+  50%    { transform: scaleX(1); transform-origin: left; }
+  50.1%  { transform: scaleX(1); transform-origin: right; }
+  100%   { transform: scaleX(0); transform-origin: right; }
 }
 
 .hero-meta {
@@ -588,6 +673,118 @@ html.translated-rtl body { top: 0 !important; }
   color: var(--fg-faint);
 }
 .entry-points strong { color: var(--fg); font-weight: 600; }
+
+/* ---- Career graph --------------------------------------------------------
+   One row per role, newest on top, so the bars climb to the right like the
+   career did. A playhead sweeps the time axis once and each bar grows as it
+   passes. Hovering a row lights its entry in the list below, and hovering an
+   entry lights its row. */
+
+.career-graph {
+  display: none;
+  margin: 0 0 34px;
+}
+.career-graph.is-ready { display: block; }
+.career-graph svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.cg-axis,
+.cg-tick { stroke: var(--line-strong); stroke-width: 1; shape-rendering: crispEdges; }
+.cg-year {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  fill: var(--fg-faint);
+}
+.cg-play { stroke: var(--fg-faint); stroke-width: 1; shape-rendering: crispEdges; }
+.cg-now  { stroke: var(--fg-faint); stroke-width: 1; stroke-dasharray: 2 3; }
+
+.cg-row { cursor: pointer; transition: opacity 0.25s ease; }
+.cg-hit { fill: transparent; }
+.cg-bar { fill: var(--line-strong); transition: fill 0.2s ease; }
+.cg-row.is-current .cg-bar,
+.cg-row:hover .cg-bar,
+.cg-row.is-lit .cg-bar { fill: var(--fg); }
+
+.cg-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.02em;
+  fill: var(--fg-muted);
+  opacity: 0;
+  transition: opacity 0.35s var(--ease-out), fill 0.2s ease;
+}
+.cg-row.is-on .cg-label { opacity: 1; }
+.cg-row.is-current .cg-label,
+.cg-row:hover .cg-label,
+.cg-row.is-lit .cg-label { fill: var(--fg); }
+.cg-role { fill: var(--fg-faint); }
+.cg-row:hover .cg-role, .cg-row.is-lit .cg-role, .cg-row.is-current .cg-role { fill: var(--fg-muted); }
+
+/* Top-left of the graph is empty (the bars climb to the right), so the
+   readout lives there: the span by default, the hovered role's place and
+   dates on hover. */
+.cg-readout {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  fill: var(--fg-faint);
+  transition: fill 0.2s ease;
+}
+.career-graph.is-focus .cg-readout { fill: var(--fg); }
+
+.career-graph.is-focus .cg-row:not(.is-lit) { opacity: 0.32; }
+
+.cg-head { fill: var(--fg); }
+.cg-pulse {
+  fill: none;
+  stroke: var(--fg);
+  stroke-width: 1;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cg-pulse 2.8s var(--ease-out) infinite;
+}
+@keyframes cg-pulse {
+  0%        { opacity: 0.6; transform: scale(1); }
+  70%, 100% { opacity: 0;   transform: scale(3.4); }
+}
+
+.entry { transition: opacity 0.25s ease; }
+.timeline.is-focus .entry:not(.is-lit) { opacity: 0.35; }
+
+/* ---- Live drawings -------------------------------------------------------
+   Small canvases that show what a project does. They animate only while on
+   screen, and render one still frame under reduced motion. */
+
+.viz { position: relative; margin: 0; }
+.viz canvas { display: block; width: 100%; }
+.viz-caption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin-top: 10px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+.viz-caption b {
+  color: var(--fg);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.viz-spc,
+.viz-nlos { margin: 2px 0 18px; }
+.viz-spc canvas,
+.viz-nlos canvas { height: 112px; }
+.viz-then { opacity: 0; transition: opacity 0.5s var(--ease-out); }
+.viz.is-done .viz-then { opacity: 1; }
 
 /* ============== SKILLS ============== */
 
@@ -787,7 +984,6 @@ html.translated-rtl body { top: 0 !important; }
   transition: border-color 0.15s ease;
 }
 .flagship-foot a:hover { border-color: var(--fg); }
-.flagship-foot .dot { color: var(--fg-faint); margin: 0 6px; }
 
 /* ============== WORK — PROJECTS ============== */
 
@@ -873,14 +1069,6 @@ html.translated-rtl body { top: 0 !important; }
 }
 .project-foot { align-items: center; }
 
-/* Center a lone final card so the odd row doesn't look unbalanced */
-@media (min-width: 641px) {
-  .projects > .project:last-child:nth-child(odd) {
-    grid-column: 1 / -1;
-    max-width: calc(50% - 8px);
-    justify-self: center;
-  }
-}
 
 /* ============== PUBLICATIONS ============== */
 
@@ -963,13 +1151,6 @@ html.translated-rtl body { top: 0 !important; }
   text-decoration-color: var(--fg);
 }
 
-.pub-summary {
-  font-size: 14.5px;
-  line-height: 1.6;
-  color: var(--fg-muted);
-  max-width: 62ch;
-  margin-bottom: 13px;
-}
 .pub-ident {
   display: block;
   font-family: var(--font-mono);
@@ -980,6 +1161,484 @@ html.translated-rtl body { top: 0 !important; }
   overflow-wrap: anywhere;
 }
 
+.pub-award {
+  color: var(--fg);
+  border: 1px solid var(--line-strong);
+  border-radius: 100px;
+  padding: 1px 8px;
+  letter-spacing: 0.06em;
+}
+
+/* ---- Step explainers -----------------------------------------------------
+   A figure that tells one story in numbered steps. script.js advances the
+   steps while the figure is on screen, adds cumulative .s0 … .sN classes for
+   the CSS to key off, and fills each step's hairline as it plays. Clicking a
+   step jumps to it; hovering or focusing the figure pauses it. */
+
+.explainer { container-type: inline-size; position: relative; margin: 0; }
+
+.ex-steps {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(var(--n, 6), minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+  counter-reset: ex;
+}
+.ex-steps li { counter-increment: ex; min-width: 0; }
+.ex-steps button {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 9px 0 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  background: none;
+  color: var(--fg-faint);
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.ex-steps button::before {
+  content: counter(ex, decimal-leading-zero);
+  display: block;
+  margin-bottom: 3px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+.ex-steps button::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  height: 1px;
+  width: calc(var(--p, 0) * 100%);
+  background: var(--fg);
+}
+.ex-steps button.is-done::after { width: 100%; background: var(--fg-faint); }
+.ex-steps button:hover { color: var(--fg-muted); }
+.ex-steps button.is-on { color: var(--fg); }
+
+.ex-say {
+  min-height: 4.9em;
+  margin-top: 14px;
+  font-size: 15px;
+  line-height: 1.62;
+  color: var(--fg-muted);
+  max-width: 72ch;
+}
+.ex-say > span { display: none; }
+.ex-say > span.is-on { display: block; animation: rise 0.45s var(--ease-out); }
+.explainer.is-part .ex-say > span.is-on { display: none; }
+.explainer.is-part .ex-say > .ex-part { display: block; color: var(--fg); animation: none; }
+.ex-say code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  color: var(--fg);
+}
+
+/* On a narrow figure the step labels give way to their numbers; the
+   sentence underneath still says what is happening. */
+@container (max-width: 520px) {
+  .ex-steps { gap: 8px; }
+  .ex-steps button { font-size: 0; }
+  .ex-steps button::before { font-size: 11px; }
+  .ex-steps button.is-on::before { color: var(--fg); }
+}
+
+/* ---- Orchestraty explainer ------------------------------------------------ */
+
+.orch-x { margin: 20px 0 24px; }
+
+.ox-stage { display: grid; grid-template-columns: minmax(0, 1fr); }
+
+.ox-pane {
+  position: relative;
+  min-width: 0;
+  padding: 12px 14px 34px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg);
+}
+.ox-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-faint);
+}
+.ox-head b { color: var(--fg); font-weight: 500; }
+.ox-file {
+  margin: 8px 0;
+  padding-bottom: 7px;
+  border-bottom: 1px dashed var(--line);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-muted);
+}
+.ox-code {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.75;
+  color: var(--fg-muted);
+  white-space: pre;
+  overflow-x: auto;
+}
+.ox-code .ln {
+  display: inline-block;
+  width: 2.6ch;
+  color: var(--fg-faint);
+  opacity: 0.6;
+  user-select: none;
+}
+.ox-line {
+  border-radius: 3px;
+  padding: 1px 3px;
+  margin: 0 -3px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* 1 · Agent A types "*, " — the contract changes. */
+.ox-ins {
+  display: inline-block;
+  max-width: 0;
+  overflow: hidden;
+  vertical-align: bottom;
+  white-space: pre;
+  color: var(--fg);
+  transition: max-width 0.5s steps(3, end);
+}
+.orch-x.s1 .ox-ins { max-width: 3ch; }
+.orch-x.s1 .ox-sig { color: var(--fg); background: var(--bg-subtle); }
+
+.ox-tag {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg);
+  border: 1px solid var(--line-strong);
+  border-radius: 100px;
+  padding: 2px 8px;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.35s ease, transform 0.35s var(--ease-out);
+}
+.orch-x.s1 .ox-tag-a,
+.orch-x.s4 .ox-tag-b { opacity: 1; transform: none; }
+
+/* 2 · Orchestraty sees the edit and works out its effect. */
+.ox-hub {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 2px;
+}
+.ox-wire {
+  position: relative;
+  display: block;
+  width: 1px;
+  height: 22px;
+  background: var(--fg-faint);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.55s var(--ease-std);
+}
+.orch-x.s2 .ox-wire-in,
+.orch-x.s3 .ox-wire-out { transform: none; }
+.ox-wire i {
+  position: absolute;
+  left: -2px;
+  top: 0;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--fg);
+  opacity: 0;
+}
+.orch-x.s2:not(.s3) .ox-wire-in i,
+.orch-x.s3:not(.s4) .ox-wire-out i { animation: ox-down 0.9s var(--ease-std) 0.2s both; }
+@keyframes ox-down {
+  0%   { top: 0; opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+.ox-core {
+  position: relative;
+  z-index: 1;
+  margin: 2px 0;
+  padding: 5px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 100px;
+  background: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-faint);
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+.orch-x.s2 .ox-core { color: var(--fg); border-color: var(--fg); }
+.ox-facts {
+  list-style: none;
+  margin: 8px 0 6px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--fg-muted);
+  text-align: center;
+}
+/* Stacked: core, then what it found, then the wire down to Agent B. */
+.ox-facts { order: 3; }
+.ox-wire-out { order: 4; }
+.ox-facts li {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.35s ease, transform 0.35s var(--ease-out);
+}
+.orch-x.s2 .ox-facts li { opacity: 1; transform: none; }
+.orch-x.s2 .ox-facts li:nth-child(2) { transition-delay: 0.35s; }
+
+/* 3 · A note waits for Agent B, ahead of its next edit. */
+.ox-note {
+  max-height: 0;
+  margin: 0;
+  padding: 0 10px;
+  overflow: hidden;
+  border-left: 2px solid var(--fg);
+  background: var(--bg-subtle);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--fg);
+  opacity: 0;
+  transition: max-height 0.5s var(--ease-std), opacity 0.4s ease, padding 0.5s var(--ease-std), margin 0.5s var(--ease-std), color 0.3s ease;
+}
+.ox-note b {
+  margin-right: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.orch-x.s3 .ox-note { max-height: 90px; padding: 7px 10px; margin: 0 0 8px; opacity: 1; }
+.orch-x.s4 .ox-note { color: var(--fg-faint); border-left-color: var(--line-strong); }
+
+/* 4 · Agent B adapts: the call passes currency by name. */
+.ox-old, .ox-new {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  white-space: pre;
+  transition: max-width 0.5s var(--ease-std), opacity 0.3s ease;
+}
+.ox-old { max-width: 6ch; }
+.ox-new { max-width: 0; color: var(--fg); }
+.orch-x.s4 .ox-old { max-width: 0; opacity: 0; }
+.orch-x.s4 .ox-new { max-width: 15ch; }
+.orch-x.s4 .ox-call { color: var(--fg); background: var(--bg-subtle); }
+
+/* 5 · Both branches merge clean. */
+.ox-merge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 14px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--fg-faint);
+}
+.ox-merge-line {
+  position: relative;
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+  order: 1;
+}
+.ox-merge-line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--fg);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.7s var(--ease-std);
+}
+.ox-merge b {
+  order: 2;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.35;
+  transition: opacity 0.3s ease, color 0.3s ease;
+}
+.ox-merge b::before { content: '✓ '; }
+.orch-x.s5 .ox-merge-line::after { transform: none; }
+.orch-x.s5 .ox-merge b { opacity: 1; color: var(--fg); transition-delay: 0.5s; }
+
+/* Side by side when there is room: A | Orchestraty | B, wires across. */
+@container (min-width: 740px) {
+  .ox-stage {
+    grid-template-columns: minmax(0, 1fr) 124px minmax(0, 1fr);
+    align-items: stretch;
+  }
+  .ox-pane { padding-inline: 12px; }
+  .ox-code { font-size: clamp(10.5px, 1.45cqi, 12px); }
+  .ox-code .ln { width: 2.2ch; }
+  .ox-hub { justify-content: flex-start; padding-top: 74px; }
+  .ox-wire {
+    position: absolute;
+    top: 86px;
+    width: auto;
+    height: 1px;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  .ox-wire-in { left: 0; right: 50%; }
+  .ox-wire-out { left: 50%; right: 0; }
+  .orch-x.s2 .ox-wire-in,
+  .orch-x.s3 .ox-wire-out { transform: none; }
+  .ox-wire i { top: -2px; left: 0; }
+  .orch-x.s2:not(.s3) .ox-wire-in i,
+  .orch-x.s3:not(.s4) .ox-wire-out i { animation-name: ox-across; }
+  .ox-facts { margin-top: 10px; padding: 0 6px; }
+}
+@keyframes ox-across {
+  0%   { left: 0; opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+
+/* ---- Smart-glasses explainer ---------------------------------------------- */
+
+.projects > .project-wide { grid-column: 1 / -1; }
+.glasses-x { margin: 6px 0 24px; }
+.gx { display: block; width: 100%; height: auto; overflow: visible; }
+
+.gx-frame { fill: none; stroke: var(--fg-muted); stroke-width: 6; stroke-linejoin: round; stroke-linecap: round; }
+.gx-far { fill: none; stroke: var(--line-strong); stroke-width: 6; stroke-linejoin: round; stroke-linecap: round; }
+.gx-glass { fill: var(--bg-subtle); }
+.gx-unit, .gx-box, .gx-batt { fill: var(--bg); stroke: var(--fg-muted); stroke-width: 1.5; }
+.gx-box { stroke-width: 2; }
+.gx-batt { fill: var(--bg-subtle); }
+.gx-soft, .gx-ring { fill: none; stroke: var(--fg-muted); stroke-width: 1.5; }
+.gx-ring { stroke-width: 3; }
+.gx-dot { fill: var(--fg-muted); }
+.gx-spk { fill: var(--bg); stroke: var(--fg-muted); stroke-width: 2; stroke-dasharray: 1.5 2.5; }
+.gx-cell { fill: none; stroke: var(--line-strong); stroke-width: 1; }
+.gx-slot, .gx-btn { fill: var(--bg-subtle); stroke: var(--fg-muted); stroke-width: 1.2; }
+.gx-fins line { stroke: var(--line-strong); stroke-width: 1.5; }
+.gx-fanbg { fill: var(--bg); stroke: var(--fg-muted); stroke-width: 1.5; }
+.gx-fan path { fill: var(--fg-faint); }
+.gx-accent { fill: var(--brick); }
+.gx-cable { fill: none; stroke: var(--fg-muted); stroke-width: 9; stroke-linecap: round; }
+.gx-weave { fill: none; stroke: var(--bg); stroke-width: 5; stroke-dasharray: 1.2 7; stroke-linecap: butt; }
+.gx-cap {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: var(--fg-faint);
+  text-anchor: middle;
+}
+.gx-batt-t { fill: var(--fg-muted); font-size: 12.5px; }
+
+.gx-labels text {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  fill: var(--fg-faint);
+  transition: fill 0.25s ease;
+}
+.gx-lead { fill: none; stroke: var(--line-strong); stroke-width: 1; transition: stroke 0.25s ease; }
+.gx [data-part] { pointer-events: all; cursor: help; transition: opacity 0.25s ease; }
+
+/* A part is "hot" when the current step uses it, or when it is hovered. */
+.gx g[data-part].is-hot .gx-frame,
+.gx g[data-part].is-hot .gx-unit,
+.gx g[data-part].is-hot .gx-box,
+.gx g[data-part].is-hot .gx-soft,
+.gx g[data-part].is-hot .gx-ring,
+.gx g[data-part].is-hot .gx-spk,
+.gx g[data-part].is-hot .gx-slot,
+.gx g[data-part].is-hot .gx-btn,
+.gx g[data-part].is-hot .gx-fanbg,
+.gx g[data-part].is-hot .gx-batt { stroke: var(--fg); }
+.gx g[data-part].is-hot .gx-dot,
+.gx g[data-part].is-hot .gx-fan path { fill: var(--fg); }
+.gx g[data-part].is-hot .gx-cable { stroke: var(--fg); }
+.gx g[data-part].is-hot .gx-cap { fill: var(--fg-muted); }
+.gx .gx-l.is-hot text { fill: var(--fg); }
+.gx .gx-l.is-hot .gx-lead { stroke: var(--fg-muted); }
+
+.gx-fx circle, .gx-fx path { fill: none; stroke: var(--fg); stroke-width: 1.5; }
+.gx-fx .gx-pulse { fill: var(--fg); stroke: none; }
+
+.gx-o {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  fill: var(--fg-faint);
+  white-space: pre;
+}
+.gx-o.is-now { fill: var(--fg); }
+
+.project-wide .project-main { max-width: 78ch; }
+
+/* On a phone the drawing scales down a lot; keep its words legible. */
+@container (max-width: 560px) {
+  .gx-labels text { font-size: 19px; }
+  .gx-o { font-size: 18px; }
+  .gx-cap { font-size: 13px; }
+}
+
+/* ---- Publication figures --------------------------------------------------- */
+
+.pub > a {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+}
+.pub-fig { margin: 0; }
+.pub-fig canvas {
+  display: block;
+  width: 100%;
+  height: 168px;
+  border-radius: 4px;
+  background: var(--bg-subtle);
+  transition: background 0.18s ease;
+}
+.pub > a:hover .pub-fig canvas,
+.pub > a:focus-visible .pub-fig canvas { background: var(--bg); }
+.pub-fig figcaption {
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: var(--fg-faint);
+}
+.pub-body { min-width: 0; }
+
+.pub-ctx { margin: 0 0 13px; display: grid; gap: 7px; }
+.pub-ctx > div { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 12px; }
+.pub-ctx dt {
+  padding-top: 3px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg-faint);
+}
+.pub-ctx dd { font-size: 14.5px; line-height: 1.55; color: var(--fg-muted); }
+
+@media (min-width: 760px) {
+  .pub > a { grid-template-columns: 260px minmax(0, 1fr); gap: 26px; align-items: start; }
+  .pub-fig canvas { height: 190px; }
+}
+
 /* ============== CONTACT ============== */
 
 .section-contact { border-bottom: none; }
@@ -987,7 +1646,7 @@ html.translated-rtl body { top: 0 !important; }
   font-size: clamp(18px, 2.4vw, 22px);
   line-height: 1.5;
   letter-spacing: -0.01em;
-  max-width: 34ch;
+  max-width: 40ch;
   margin-bottom: 28px;
 }
 .contact-email {
@@ -1043,6 +1702,28 @@ html.translated-rtl body { top: 0 !important; }
 }
 .footer-inner a:hover { color: var(--fg); }
 
+/* ============== WIDE SCREENS ============== */
+
+/* On laptops and up the 880px column left wide empty margins. Widen the
+   page, give the section rail more room, and scale the hero with it. Long
+   text keeps its own measure (prose, summaries and bullets are capped in
+   ch), so lines never get too long to read. */
+@media (min-width: 1200px) {
+  :root { --maxw: 1180px; }
+  .section .container {
+    grid-template-columns: 200px 1fr;
+    column-gap: 64px;
+  }
+  .section .container > .section-head .section-title { font-size: 22px; }
+  .hero-name { font-size: 88px; }
+  .hero-tagline { font-size: 27px; max-width: 30ch; }
+  .hero-portrait { width: 248px; }
+  .entry { grid-template-columns: 190px 1fr; }
+  .skill-group { grid-template-columns: 190px 1fr; }
+  .entry-points li { max-width: 74ch; }
+  .projects { gap: 20px; }
+}
+
 /* ============== RESPONSIVE ============== */
 
 @media (max-width: 640px) {
@@ -1057,6 +1738,7 @@ html.translated-rtl body { top: 0 !important; }
   .entry-date { padding-top: 0; }
 
   .projects { grid-template-columns: 1fr; }
+
 }
 
 /* ============== MOTION ============== */
@@ -1067,6 +1749,8 @@ html.translated-rtl body { top: 0 !important; }
   /* Kill the chip sweep and entrance outright; chips stay put and visible. */
   .chip { opacity: 1 !important; }
   .chip, .chip::after { animation: none !important; }
+  .cg-pulse { animation: none !important; opacity: 0; }
+  .ex-say > span.is-on, .ox-wire i { animation: none !important; }
 }
 
 /* ============== THEME TRANSITION ============== */
